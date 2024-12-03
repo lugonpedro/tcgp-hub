@@ -40,7 +40,7 @@ function App() {
         className="mb-8 max-w-72"
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-[780px]">
-        {filtered ? filtered.map((poke) => (
+        {search ? filtered.map((poke) => (
           <Card key={poke.id} {...poke} />
         )) : pokes.map((poke) => (
           <Card key={poke.id} {...poke} />
