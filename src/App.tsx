@@ -32,7 +32,13 @@ function App() {
 
   return (
     <div className="p-4 flex flex-col items-center">
-      <h1 className="text-3xl mb-8">TCGP Hub</h1>
+      <div className="mb-8">
+        <h1 className="text-3xl">TCGP Hub</h1>
+        <p>
+          See your collection progress, share with friends, build decks and
+          more!
+        </p>
+      </div>
       <Input
         placeholder="Search..."
         value={search}
@@ -40,11 +46,9 @@ function App() {
         className="mb-8 max-w-72"
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-[780px]">
-        {search ? filtered.map((poke) => (
-          <Card key={poke.id} {...poke} />
-        )) : pokes.map((poke) => (
-          <Card key={poke.id} {...poke} />
-        ))}
+        {search
+          ? filtered.map((poke) => <Card key={poke.id} {...poke} />)
+          : pokes.map((poke) => <Card key={poke.id} {...poke} />)}
         {filtered.length === 0 && <p className="text-2xl">No results</p>}
       </div>
     </div>
