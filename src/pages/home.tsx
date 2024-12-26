@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { getJSON } from "./utils/get-json";
-import { Card } from "./components/Card";
-import { Input } from "./components/ui/input";
-import { useToast } from "./hooks/use-toast";
+import { Card } from "@/components/poke-card";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 
-function App() {
+function Home() {
   const [pokes, setPokes] = useState<Card[]>([]);
   const [search, setSearch] = useState("");
   const { toast } = useToast();
@@ -16,22 +15,22 @@ function App() {
   }, [search]);
 
   useEffect(() => {
-    getJSON(
-      "https://raw.githubusercontent.com/chase-manning/pokemon-tcg-pocket-cards/refs/heads/main/v1.json",
-      function (err, data) {
-        if (err) {
-          toast({ description: "Failed to load data", variant: "destructive" });
-          console.error(err);
-          return;
-        }
-
-        setPokes(data);
-      }
-    );
+    getPokes()
   }, []);
 
+  async function getPokes() {
+    // const [status, data] = await getPokeJSON();
+    // if (status !== 200) {
+    //   toast({ description: "Failed to load data", variant: "destructive" });
+    //   console.error(data);
+    //   return;
+    // }
+
+    // setPokes(data);
+  }
+
   return (
-    <div className="p-4 flex flex-col items-center">
+    <div className="">
       <div className="mb-8">
         <h1 className="text-3xl">TCGP Hub</h1>
         <p>
@@ -55,4 +54,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
