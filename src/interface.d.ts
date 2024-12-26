@@ -1,38 +1,34 @@
-type Rarity =
-  | "Common"
-  | "Uncommon"
-  | "Rare"
-  | "Rare EX"
-  | "Full Art"
-  | "Full Art EX/Support"
-  | "Immersive"
-  | "Gold Crown"
-  | "Promo";
+interface Rarity {
+  rarity: number;
+  type: string;
+}
 
-type Pack = "Any" | "Mewtwo" | "Charizard" | "Pikachu" | "Promo";
+interface Package {
+  img: string;
+  name: string;
+}
 
-type ColorType =
-  | "Colorless"
-  | "Supporter"
-  | "Fire"
-  | "Psychic"
-  | "Grass"
-  | "Water"
-  | "Lightning"
-  | "Fighting"
-  | "Darkness"
-  | "Metal";
+interface Attack {
+  costs: string[];
+  damage: string;
+}
 
-type Stage = "Basic" | "Stage 1" | "Stage 2";
+interface Attacks {
+  [key: string]: Attack;
+}
 
 interface Card {
   id: string;
+  href: string;
+  set: string;
+  img: string;
   name: string;
+  hp?: string;
+  type: string;
   rarity: Rarity;
-  pack: Pack;
-  type: ColorType;
-  health: number;
-  stage: Stage;
-  craftingCost: number;
-  image: string;
+  package: Package[];
+  ability: Record<string, unknown>;
+  attacks: Attacks;
+  weaknesses: string[];
+  retreatCost: string[];
 }

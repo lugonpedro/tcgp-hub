@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { collection, Firestore, getDocs, getFirestore } from "firebase/firestore/lite";
+import { getFirestore, collection, getCountFromServer, DocumentSnapshot, query, orderBy, limit, startAfter, endBefore, limitToLast, getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -16,12 +16,47 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { app, auth, db };
+const getPaginatedData = async (
+  collection_name: string,
+  order_by: string,
+  direction: 'next' | 'prev' | undefined,
+  startAfterDoc?: DocumentSnapshot,
+  endBeforeDoc?: DocumentSnapshot,
+  numPerPage: number = 10,
+) => {
+  const dataCollection = collection(db, collection_name);
 
-// EXAMPLE
-export async function getCities(db: Firestore) {
-  const citiesCol = collection(db, "cities");
-  const citySnapshot = await getDocs(citiesCol);
-  const cityList = citySnapshot.docs.map((doc) => doc.data());
-  return cityList;
+  let dataQuery = query(dataCollection, orderBy(order_by), limit(numPerPage));
+
+  if (direction === 'next' && startAfterDoc) {
+    dataQuery = query(dataQuery, startAfter(startAfterDoc));
+  } 
+  
+  if (direction === 'prev' && endBeforeDoc) {
+    dataQuery = query(
+      dataCollection,
+      orderBy(order_by),
+      endBefore(endBeforeDoc),
+      limitToLast(numPerPage)
+    );
+  }
+
+  const snapshots = await getDocs(dataQuery);
+
+  const result = snapshots.docs.map((doc) => doc.data());
+
+  return {
+    result: result as any[],
+    lastDoc: snapshots.docs[snapshots.docs.length - 1],
+    firstDoc: snapshots.docs[0],
+  };
+};
+
+const getNumPages = async (collection_name: string, per_page: number): Promise<number> => {
+  const dataCollection = collection(db, collection_name)
+  const count = await getCountFromServer(dataCollection)
+  const numPages = Math.ceil(count.data().count / per_page)
+  return numPages
 }
+
+export { app, auth, db, getPaginatedData, getNumPages };
