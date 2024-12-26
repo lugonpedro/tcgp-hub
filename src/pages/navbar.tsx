@@ -6,21 +6,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { authContext } from "@/contexts/auth-context";
+import { auth } from "@/services/firebase";
+import { User } from "firebase/auth";
+import { Menu, SquareLibrary, User as UserIcon, WalletCards, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import {
-  BrickWall,
-  Cuboid,
-  FileText,
-  Menu,
-  SquareLibrary,
-  User as UserIcon,
-  WalletCards,
-  X,
-} from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { app, auth } from "@/services/firebase";
-import { User } from "firebase/auth";
 
 export default function Navbar() {
   const { user } = authContext();
@@ -59,16 +50,8 @@ export default function Navbar() {
 function NavbarLinks() {
   return (
     <>
-      <NavbarItem
-        icon={<SquareLibrary size={14} />}
-        title="Cartas"
-        link="/cards"
-      />
-      <NavbarItem
-        icon={<WalletCards size={14} />}
-        title="Decks"
-        link="/decks"
-      />
+      <NavbarItem icon={<SquareLibrary size={14} />} title="Cartas" link="/cards" />
+      <NavbarItem icon={<WalletCards size={14} />} title="Decks" link="/decks" />
     </>
   );
 }
@@ -80,17 +63,11 @@ function ProfileButton({ user }: { user: User | null }) {
         <DropdownMenuTrigger>
           <NavbarItem icon={<UserIcon size={14} />} title={user.email!} />
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          side="right"
-          className="p-2 bg-secondary text-primary hidden md:block"
-        >
+        <DropdownMenuContent side="right" className="p-2 bg-secondary text-primary hidden md:block">
           <Link to="/profile">
             <DropdownMenuItem>Perfil</DropdownMenuItem>
           </Link>
-          <DropdownMenuItem
-            onClick={() => auth.signOut()}
-            className="cursor-pointer"
-          >
+          <DropdownMenuItem onClick={() => auth.signOut()} className="cursor-pointer">
             Sair
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -98,9 +75,7 @@ function ProfileButton({ user }: { user: User | null }) {
     );
   }
 
-  return (
-    <NavbarItem icon={<UserIcon size={14} />} title="Entrar" link="/login" />
-  );
+  return <NavbarItem icon={<UserIcon size={14} />} title="Entrar" link="/login" />;
 }
 
 function NavbarDesktop({ user }: { user: User | null }) {
@@ -182,15 +157,11 @@ function NavbarItem(props: NavbarItemProps) {
         <Link
           to={props.link}
           className={`flex w-full items-center px-3 py-2 text-primary duration-300 hover:bg-mainBlue/30 ${
-            actualPage === props.link || actualPage === props.link
-              ? "bg-mainBlue/30 hover:bg-mainBlue/30"
-              : ""
+            actualPage === props.link || actualPage === props.link ? "bg-mainBlue/30 hover:bg-mainBlue/30" : ""
           }`}
         >
           {props.icon}
-          <p className={`text-sm text-primary ${props.icon ? "ml-2" : ""}`}>
-            {props.title}
-          </p>
+          <p className={`text-sm text-primary ${props.icon ? "ml-2" : ""}`}>{props.title}</p>
         </Link>
       )}
       {!props.link && (
@@ -199,9 +170,7 @@ function NavbarItem(props: NavbarItemProps) {
           onClick={props.onClick}
         >
           {props.icon}
-          <p className={`text-sm text-primary ${props.icon ? "ml-2" : ""}`}>
-            {props.title}
-          </p>
+          <p className={`text-sm text-primary ${props.icon ? "ml-2" : ""}`}>{props.title}</p>
         </div>
       )}
     </>

@@ -1,6 +1,6 @@
+import Home from "@/pages/home";
 import NotFound from "@/pages/not-found";
 import { createBrowserRouter } from "react-router-dom";
-import Home from "@/pages/home";
 import AuthLayout from "./pages/auth/layout";
 import Login from "./pages/auth/login";
 import Navbar from "./pages/navbar";
@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
-      }
+      },
     ],
   },
 ]);

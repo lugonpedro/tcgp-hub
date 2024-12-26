@@ -1,7 +1,6 @@
-
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth'
-import { getFirestore, collection, getDocs, Firestore } from 'firebase/firestore/lite';
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { collection, Firestore, getDocs, getFirestore } from "firebase/firestore/lite";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -13,17 +12,16 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app)
+const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { app, auth, db }
+export { app, auth, db };
 
 // EXAMPLE
 export async function getCities(db: Firestore) {
-  const citiesCol = collection(db, 'cities');
+  const citiesCol = collection(db, "cities");
   const citySnapshot = await getDocs(citiesCol);
-  const cityList = citySnapshot.docs.map(doc => doc.data());
+  const cityList = citySnapshot.docs.map((doc) => doc.data());
   return cityList;
 }

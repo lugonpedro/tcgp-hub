@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/poke-card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect, useMemo, useState } from "react";
 
 function Home() {
   const [pokes, setPokes] = useState<Card[]>([]);
@@ -15,7 +15,7 @@ function Home() {
   }, [search]);
 
   useEffect(() => {
-    getPokes()
+    getPokes();
   }, []);
 
   async function getPokes() {
@@ -25,7 +25,6 @@ function Home() {
     //   console.error(data);
     //   return;
     // }
-
     // setPokes(data);
   }
 
@@ -33,10 +32,7 @@ function Home() {
     <div className="">
       <div className="mb-8">
         <h1 className="text-3xl">TCGP Hub</h1>
-        <p>
-          See your collection progress, share with friends, build decks and
-          more!
-        </p>
+        <p>See your collection progress, share with friends, build decks and more!</p>
       </div>
       <Input
         placeholder="Search..."

@@ -1,16 +1,8 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 function Login() {
   const {
@@ -32,7 +24,6 @@ function Login() {
         return;
       }
 
-
       const token = credential.accessToken;
       const user = result.user;
     } catch (error: any) {
@@ -50,9 +41,7 @@ function Login() {
         <div className="p-4 max-w-[800px] mx-auto flex flex-col justify-center h-screen">
           <Card>
             <CardHeader>
-              <CardTitle className="text-start text-2xl font-semibold">
-                Login
-              </CardTitle>
+              <CardTitle className="text-start text-2xl font-semibold">Login</CardTitle>
             </CardHeader>
             <CardContent>
               <Button onClick={login}>Login com Google</Button>
