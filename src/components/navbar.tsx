@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { authContext } from "@/contexts/auth-context";
 import { auth } from "@/services/firebase";
 import { User } from "firebase/auth";
-import { Menu, SquareLibrary, User as UserIcon, WalletCards, X } from "lucide-react";
+import { ChartSpline, Handshake, Menu, SquareLibrary, User as UserIcon, WalletCards, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { ReactNode, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
@@ -51,7 +51,9 @@ function NavbarLinks() {
   return (
     <>
       <NavbarItem icon={<SquareLibrary size={14} />} title="Cartas" link="/cards" />
+      <NavbarItem icon={<ChartSpline size={14} />} title="Rastreio" link="/tracker" />
       <NavbarItem icon={<WalletCards size={14} />} title="Decks" link="/decks" />
+      <NavbarItem icon={<Handshake size={14} />} title="Trocas" link="/trades" />
     </>
   );
 }
