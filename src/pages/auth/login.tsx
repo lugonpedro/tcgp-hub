@@ -1,17 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<any>();
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  // } = useForm<any>();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   async function login() {
     const auth = getAuth();
@@ -24,8 +22,8 @@ function Login() {
         return;
       }
 
-      const token = credential.accessToken;
-      const user = result.user;
+      // const token = credential.accessToken;
+      // const user = result.user;
     } catch (error: any) {
       const errorCode = error.code;
       const errorMessage = error.message;

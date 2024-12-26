@@ -26,6 +26,8 @@ function Home() {
     //   return;
     // }
     // setPokes(data);
+    setPokes([])
+    toast({description: "Erro ao pegar cartas"})
   }
 
   return (
