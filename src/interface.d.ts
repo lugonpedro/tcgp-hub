@@ -31,4 +31,5 @@ interface Card {
   attacks: Attacks;
   weaknesses: string[];
   retreatCost: string[];
+  createdAt: string
 }
