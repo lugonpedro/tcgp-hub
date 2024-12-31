@@ -90,8 +90,8 @@ export default function Tracker() {
     return cardsPerPackage;
   }, [actualUserCards, packages]);
 
-  if(!user) {
-    return (<p className="text-background">Faça login para ver suas estatísticas</p>)
+  if (!user) {
+    return <p className="text-background">Faça login para ver suas estatísticas</p>;
   }
 
   return (

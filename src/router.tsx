@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Navbar from "./components/navbar";
 import AuthLayout from "./pages/auth/layout";
 import Login from "./pages/auth/login";
+import Profile from "./pages/profile";
 import Tracker from "./pages/tracker";
 
 export const router = createBrowserRouter([
@@ -14,6 +15,10 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
       {
         path: "/tracker",

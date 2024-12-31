@@ -1,6 +1,18 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, getCountFromServer, DocumentSnapshot, query, orderBy, limit, startAfter, endBefore, limitToLast, getDocs } from "firebase/firestore";
+import {
+  collection,
+  DocumentSnapshot,
+  endBefore,
+  getCountFromServer,
+  getDocs,
+  getFirestore,
+  limit,
+  limitToLast,
+  orderBy,
+  query,
+  startAfter,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -19,26 +31,21 @@ const db = getFirestore(app);
 const getPaginatedData = async (
   collection_name: string,
   order_by: string,
-  direction: 'next' | 'prev' | undefined,
+  direction: "next" | "prev" | undefined,
   startAfterDoc?: DocumentSnapshot,
   endBeforeDoc?: DocumentSnapshot,
-  numPerPage: number = 10,
+  numPerPage: number = 10
 ) => {
   const dataCollection = collection(db, collection_name);
 
   let dataQuery = query(dataCollection, orderBy(order_by), limit(numPerPage));
 
-  if (direction === 'next' && startAfterDoc) {
+  if (direction === "next" && startAfterDoc) {
     dataQuery = query(dataQuery, startAfter(startAfterDoc));
-  } 
-  
-  if (direction === 'prev' && endBeforeDoc) {
-    dataQuery = query(
-      dataCollection,
-      orderBy(order_by),
-      endBefore(endBeforeDoc),
-      limitToLast(numPerPage)
-    );
+  }
+
+  if (direction === "prev" && endBeforeDoc) {
+    dataQuery = query(dataCollection, orderBy(order_by), endBefore(endBeforeDoc), limitToLast(numPerPage));
   }
 
   const snapshots = await getDocs(dataQuery);
@@ -53,10 +60,10 @@ const getPaginatedData = async (
 };
 
 const getNumPages = async (collection_name: string, per_page: number): Promise<number> => {
-  const dataCollection = collection(db, collection_name)
-  const count = await getCountFromServer(dataCollection)
-  const numPages = Math.ceil(count.data().count / per_page)
-  return numPages
-}
+  const dataCollection = collection(db, collection_name);
+  const count = await getCountFromServer(dataCollection);
+  const numPages = Math.ceil(count.data().count / per_page);
+  return numPages;
+};
 
-export { app, auth, db, getPaginatedData, getNumPages };
+export { app, auth, db, getNumPages, getPaginatedData };

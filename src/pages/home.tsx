@@ -80,7 +80,7 @@ function Home() {
 
   useEffect(() => {
     if (search.length > 2) {
-      setFiltered([])
+      setFiltered([]);
       debounceSearch(capitalizeFirstLetter(search));
     }
   }, [search]);
@@ -103,7 +103,12 @@ function Home() {
         <h1 className="text-3xl">TCGP Hub</h1>
         <p>Veja seu progresso de coleção, compartilhe com os amigos, monte decks compartilhaveis e mais!</p>
       </div>
-      <Input placeholder="Pesquisar..." value={search} onChange={(e) => setSearch(e.target.value)} className="mb-8 text-background" />
+      <Input
+        placeholder="Pesquisar..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="mb-8 text-background"
+      />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-[780px] mb-8">
         {search.length >= 2
           ? filtered.map((card) => <PokeCard key={card.id} {...card} owned={userCards.includes(card.id)} />)

@@ -30,7 +30,7 @@ export function PokeCard(poke: Card & { owned: boolean }) {
       return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     if (!isOwned) {
       await addCardToCollection(poke);
@@ -45,7 +45,7 @@ export function PokeCard(poke: Card & { owned: boolean }) {
       user_id: user!.uid,
     });
     setIsOwned(true);
-    setIsLoading(false)
+    setIsLoading(false);
   }
 
   async function removeCardFromCollection(poke: Card) {
@@ -61,7 +61,7 @@ export function PokeCard(poke: Card & { owned: boolean }) {
       toast({ description: "Algo deu errado, tente novamente", variant: "destructive" });
     }
 
-    setIsLoading(false)
+    setIsLoading(false);
   }
 
   return (
