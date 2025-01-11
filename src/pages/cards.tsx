@@ -2,24 +2,28 @@ import Loading from "@/components/loading";
 import { PokeCard } from "@/components/poke-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ToastAction } from "@/components/ui/toast";
 import { authContext } from "@/contexts/auth-context";
 import { useCardsContext } from "@/contexts/cards-contex";
+import { useToast } from "@/hooks/use-toast";
 import { db, getNumPages, getPaginatedData } from "@/services/firebase";
 import { capitalizeFirstLetter } from "@/utils/capitalize-first-letter";
-import { collection, DocumentSnapshot, getDocs, limit, query, where } from "firebase/firestore";
+import { DocumentSnapshot, addDoc, collection, deleteDoc, doc, getDocs, limit, query, where } from "firebase/firestore";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Home() {
+export default function Cards() {
   const { user } = authContext();
   const [data, setData] = useState<Card[]>([]);
-  const { cards, getUserCards } = useCardsContext();
+  const { cards, add, remove, getUserCards } = useCardsContext();
   const [search, setSearch] = useState("");
   const [filtered, setFiltered] = useState<Card[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingAdd, setLoadingAdd] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  const {toast} = useToast()
 
   const numPerPage = 20;
   const [firstDoc, setFirstDoc] = useState<DocumentSnapshot | undefined>(undefined);
@@ -92,6 +96,52 @@ function Home() {
     setPage((prev) => prev + 1);
   };
 
+  async function onClick(poke: Card) {
+    if (!user) {
+      toast({
+        description: "Você precisa estar logado para adicionar cartas a sua coleção",
+        action: (
+          <ToastAction altText="Fazer Login" onClick={() => navigate("/login")}>
+            Fazer Login
+          </ToastAction>
+        ),
+      });
+      return;
+    }
+
+    setLoadingAdd(true);
+
+    if (cards.includes(poke.id)) {
+      await removeCardFromCollection(poke);
+    } else {
+      await addCardToCollection(poke);
+    }
+
+    setLoadingAdd(false);
+  }
+
+  async function addCardToCollection(poke: Card) {
+    add(poke)
+    await addDoc(collection(db, "collections"), {
+      card_id: poke.id,
+      user_id: user!.uid,
+    });
+  }
+
+  async function removeCardFromCollection(poke: Card) {
+    const q = query(collection(db, "collections"), where("user_id", "==", user!.uid), where("card_id", "==", poke.id));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      querySnapshot.forEach(async (document) => {
+        await deleteDoc(doc(db, "collections", document.id));
+      });
+      remove(poke)
+    } else {
+      toast({ description: "Algo deu errado, tente novamente", variant: "destructive" });
+    }
+  }
+
   return (
     <div>
       <div className="mb-8 text-background">
@@ -113,7 +163,8 @@ function Home() {
               key={card.id}
               poke={card}
               owned={cards.includes(card.id)}
-              onClick={() => navigate("/cards/" + card.id)}
+              onClick={() => onClick(card)}
+              disabled={loadingAdd}
             />
           ))}
         {!loading &&
@@ -123,7 +174,8 @@ function Home() {
               key={card.id}
               poke={card}
               owned={cards.includes(card.id)}
-              onClick={() => navigate("/cards/" + card.id)}
+              onClick={() => onClick(card)}
+              disabled={loadingAdd}
             />
           ))}
       </div>
@@ -153,5 +205,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;

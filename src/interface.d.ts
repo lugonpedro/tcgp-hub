@@ -3,11 +3,6 @@ interface Rarity {
   type: string;
 }
 
-interface Package {
-  img: string;
-  name: string;
-}
-
 interface Attack {
   costs: string[];
   damage: string;
@@ -26,10 +21,22 @@ interface Card {
   hp?: string;
   type: string;
   rarity: Rarity;
-  package: Package[];
+  package: Pack[];
   ability: Record<string, unknown>;
   attacks: Attacks;
   weaknesses: string[];
   retreatCost: string[];
   createdAt: string;
+}
+
+interface Pack {
+  name: string;
+  img: string;
+}
+
+interface Set {
+  id: string;
+  name: string;
+  img: string;
+  packs: Pack[];
 }

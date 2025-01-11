@@ -6,6 +6,7 @@ import AuthLayout from "./pages/auth/layout";
 import Login from "./pages/auth/login";
 import Profile from "./pages/profile";
 import Tracker from "./pages/tracker";
+import Cards from "./pages/cards";
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/cards",
+        element: <Cards />,
       },
       {
         path: "/profile",
