@@ -1,18 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import {
-  collection,
-  DocumentSnapshot,
-  endBefore,
-  getCountFromServer,
-  getDocs,
-  getFirestore,
-  limit,
-  limitToLast,
-  orderBy,
-  query,
-  startAfter,
-} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -28,42 +16,42 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const getPaginatedData = async (
-  collection_name: string,
-  order_by: string,
-  direction: "next" | "prev" | undefined,
-  startAfterDoc?: DocumentSnapshot,
-  endBeforeDoc?: DocumentSnapshot,
-  numPerPage: number = 10
-) => {
-  const dataCollection = collection(db, collection_name);
+// const getPaginatedData = async (
+//   collection_name: string,
+//   order_by: string,
+//   direction: "next" | "prev" | undefined,
+//   startAfterDoc?: DocumentSnapshot,
+//   endBeforeDoc?: DocumentSnapshot,
+//   numPerPage: number = 10
+// ) => {
+//   const dataCollection = collection(db, collection_name);
 
-  let dataQuery = query(dataCollection, orderBy(order_by), limit(numPerPage));
+//   let dataQuery = query(dataCollection, orderBy(order_by), limit(numPerPage));
 
-  if (direction === "next" && startAfterDoc) {
-    dataQuery = query(dataQuery, startAfter(startAfterDoc));
-  }
+//   if (direction === "next" && startAfterDoc) {
+//     dataQuery = query(dataQuery, startAfter(startAfterDoc));
+//   }
 
-  if (direction === "prev" && endBeforeDoc) {
-    dataQuery = query(dataCollection, orderBy(order_by), endBefore(endBeforeDoc), limitToLast(numPerPage));
-  }
+//   if (direction === "prev" && endBeforeDoc) {
+//     dataQuery = query(dataCollection, orderBy(order_by), endBefore(endBeforeDoc), limitToLast(numPerPage));
+//   }
 
-  const snapshots = await getDocs(dataQuery);
+//   const snapshots = await getDocs(dataQuery);
 
-  const result = snapshots.docs.map((doc) => doc.data());
+//   const result = snapshots.docs.map((doc) => doc.data());
 
-  return {
-    result: result as any[],
-    lastDoc: snapshots.docs[snapshots.docs.length - 1],
-    firstDoc: snapshots.docs[0],
-  };
-};
+//   return {
+//     result: result as any[],
+//     lastDoc: snapshots.docs[snapshots.docs.length - 1],
+//     firstDoc: snapshots.docs[0],
+//   };
+// };
 
-const getNumPages = async (collection_name: string, per_page: number): Promise<number> => {
-  const dataCollection = collection(db, collection_name);
-  const count = await getCountFromServer(dataCollection);
-  const numPages = Math.ceil(count.data().count / per_page);
-  return numPages;
-};
+// const getNumPages = async (collection_name: string, per_page: number): Promise<number> => {
+//   const dataCollection = collection(db, collection_name);
+//   const count = await getCountFromServer(dataCollection);
+//   const numPages = Math.ceil(count.data().count / per_page);
+//   return numPages;
+// };
 
-export { app, auth, db, getNumPages, getPaginatedData };
+export { app, auth, db };

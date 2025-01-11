@@ -1,5 +1,4 @@
 import { db } from "@/services/firebase";
-import { User } from "firebase/auth";
 import { collection, getDocs, query } from "firebase/firestore";
 import { create } from "zustand";
 
@@ -8,14 +7,13 @@ type State = {
 };
 
 type Actions = {
-  getSets: (user: User | null) => void;
+  getSets: () => void;
 };
 
 export const useSetsContext = create<State & Actions>(
   (set) => ({
     sets: [],
-    getSets: async (user) => {
-      if (!user) return;
+    getSets: async () => {
       const q = query(collection(db, "sets"));
       const querySnapshot = await getDocs(q);
 

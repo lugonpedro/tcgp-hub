@@ -1,24 +1,40 @@
 import { db } from "@/services/firebase";
 import { User } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 type State = {
-  cards: string[];
+  cards: CardProps[];
+  myCards: string[];
 };
 
 type Actions = {
-  getUserCards: (user: User | null) => void;
-  add: (card: CardProps) => void;
-  remove: (card: CardProps) => void;
+  getCards: () => void;
+  getMyCards: (user: User | null) => void;
+  addToMyCards: (card: CardProps) => void;
+  removeFromMyCards: (card: CardProps) => void;
 };
 
 export const useCardsContext = create(
   persist<State & Actions>(
     (set, get) => ({
       cards: [],
-      getUserCards: async (user) => {
+      getCards: async () => {
+        const q = query(collection(db, "cards"), orderBy("createdAt", "asc"));
+        const querySnapshot = await getDocs(q);
+  
+        const cardsArr: CardProps[] = [];
+        await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            cardsArr.push(doc.data() as CardProps);
+          })
+        );
+
+        set({ cards: cardsArr });
+      },
+      myCards: [],
+      getMyCards: async (user) => {
         if (!user) return;
         const q = query(collection(db, "collections"), where("user_id", "==", user!.uid));
         const querySnapshot = await getDocs(q);
@@ -30,13 +46,13 @@ export const useCardsContext = create(
           })
         );
 
-        set({ cards: cardsArr });
+        set({ myCards: cardsArr });
       },
-      add: async (card) => {
-        set({ cards: [...get().cards, card.id] });
+      addToMyCards: async (card) => {
+        set({ myCards: [...get().myCards, card.id] });
       },
-      remove: async (card) => {
-        set({ cards: get().cards.filter((c) => c !== card.id) });
+      removeFromMyCards: async (card) => {
+        set({ myCards: get().myCards.filter((c) => c !== card.id) });
       },
     }),
     {

@@ -6,95 +6,42 @@ import { ToastAction } from "@/components/ui/toast";
 import { authContext } from "@/contexts/auth-context";
 import { useCardsContext } from "@/contexts/cards-contex";
 import { useToast } from "@/hooks/use-toast";
-import { db, getNumPages, getPaginatedData } from "@/services/firebase";
-import { capitalizeFirstLetter } from "@/utils/capitalize-first-letter";
-import { DocumentSnapshot, addDoc, collection, deleteDoc, doc, getDocs, limit, query, where } from "firebase/firestore";
-import debounce from "lodash.debounce";
-import { useCallback, useEffect, useState } from "react";
+import { db } from "@/services/firebase";
+import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Cards() {
   const { user } = authContext();
-  const [data, setData] = useState<CardProps[]>([]);
-  const { cards, add, remove, getUserCards } = useCardsContext();
+  const { cards, getCards, myCards, getMyCards, addToMyCards, removeFromMyCards } = useCardsContext();
   const [search, setSearch] = useState("");
-  const [filtered, setFiltered] = useState<CardProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [loadingAdd, setLoadingAdd] = useState<boolean>(false);
+  const [loadingCard, setLoadingCard] = useState<boolean>(false);
+  const [page, setPage] = useState(1);
+  const pageLimit = 20;
 
   const navigate = useNavigate();
-  const {toast} = useToast()
-
-  const numPerPage = 20;
-  const [firstDoc, setFirstDoc] = useState<DocumentSnapshot | undefined>(undefined);
-  const [lastDoc, setLastDoc] = useState<DocumentSnapshot | undefined>(undefined);
-  const [pages, setPages] = useState<number | null>(null);
-  const [page, setPage] = useState<number>(1);
-  const [direction, setDirection] = useState<"prev" | "next" | undefined>(undefined);
+  const { toast } = useToast();
 
   useEffect(() => {
-    getNumPages("cards", numPerPage).then((pages) => setPages(pages));
+    setLoading(true);
+    getCards();
+    setLoading(false);
   }, []);
 
   useEffect(() => {
-    const startAfterDoc = direction === "next" ? lastDoc : undefined;
-    const endBeforeDoc = direction === "prev" ? firstDoc : undefined;
-
-    async function getData() {
-      setLoading(true);
-      const data = await getPaginatedData("cards", "createdAt", direction, startAfterDoc, endBeforeDoc, numPerPage);
-      setData(data.result);
-      setFirstDoc(data.firstDoc);
-      setLastDoc(data.lastDoc);
-      setLoading(false);
-    }
-
-    getData();
-  }, [page]);
-
-  useEffect(() => {
-    getUserCards(user);
+    setLoading(true);
+    getMyCards(user);
+    setLoading(false);
   }, [user]);
 
-  async function searchFilter(search: string) {
-    const q = query(collection(db, "cards"), where("name", ">=", search), limit(20));
-    const querySnapshot = await getDocs(q);
-
-    const cards: CardProps[] = [];
-    await Promise.all(
-      querySnapshot.docs.map(async (doc) => {
-        cards.push(doc.data() as CardProps);
-      })
-    );
-
-    setFiltered(cards);
-    setLoading(false);
-  }
-
-  const debounceSearch = useCallback(
-    debounce(async (search: string) => await searchFilter(capitalizeFirstLetter(search)), 1000),
-    []
-  );
-
-  useEffect(() => {
+  const actualCards = useMemo(() => {
     if (search.length > 2) {
-      setLoading(true);
-      setFiltered([]);
-      debounceSearch(search);
+      return cards.filter((card) => card.name.toLowerCase().includes(search.toLowerCase()));
+    } else {
+      return cards.slice((page - 1) * pageLimit, page * pageLimit);
     }
-  }, [search]);
-
-  const handlePreviousClick = () => {
-    if (page === 1) return;
-    setDirection("prev");
-    setPage((prev) => prev - 1);
-  };
-
-  const handleNextClick = () => {
-    if (page === pages) return;
-    setDirection("next");
-    setPage((prev) => prev + 1);
-  };
+  }, [search, page]);
 
   async function onClick(poke: CardProps) {
     if (!user) {
@@ -109,26 +56,26 @@ export default function Cards() {
       return;
     }
 
-    setLoadingAdd(true);
+    setLoadingCard(true);
 
-    if (cards.includes(poke.id)) {
-      await removeCardFromCollection(poke);
+    if (myCards.includes(poke.id)) {
+      await remove(poke);
     } else {
-      await addCardToCollection(poke);
+      await add(poke);
     }
 
-    setLoadingAdd(false);
+    setLoadingCard(false);
   }
 
-  async function addCardToCollection(poke: CardProps) {
-    add(poke)
+  async function add(poke: CardProps) {
+    addToMyCards(poke);
     await addDoc(collection(db, "collections"), {
       card_id: poke.id,
       user_id: user!.uid,
     });
   }
 
-  async function removeCardFromCollection(poke: CardProps) {
+  async function remove(poke: CardProps) {
     const q = query(collection(db, "collections"), where("user_id", "==", user!.uid), where("card_id", "==", poke.id));
     const querySnapshot = await getDocs(q);
 
@@ -136,10 +83,18 @@ export default function Cards() {
       querySnapshot.forEach(async (document) => {
         await deleteDoc(doc(db, "collections", document.id));
       });
-      remove(poke)
+      removeFromMyCards(poke);
     } else {
       toast({ description: "Algo deu errado, tente novamente", variant: "destructive" });
     }
+  }
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!loading && !cards) {
+    return <div className="text-background">Nenhuma carta encontrada</div>;
   }
 
   return (
@@ -155,48 +110,28 @@ export default function Cards() {
         className="mb-8 text-background"
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-[780px] mb-8">
-        {loading && <Loading />}
-        {!loading &&
-          search.length < 2 &&
-          data.map((card) => (
-            <PokeCard
-              key={card.id}
-              poke={card}
-              owned={cards.includes(card.id)}
-              onClick={() => onClick(card)}
-              disabled={loadingAdd}
-            />
-          ))}
-        {!loading &&
-          search.length > 2 &&
-          filtered.map((card) => (
-            <PokeCard
-              key={card.id}
-              poke={card}
-              owned={cards.includes(card.id)}
-              onClick={() => onClick(card)}
-              disabled={loadingAdd}
-            />
-          ))}
+        {actualCards!.map((card) => (
+          <PokeCard key={card.id} poke={card} owned={myCards.includes(card.id)} onClick={() => onClick(card)} disabled={loadingCard} />
+        ))}
       </div>
       {search.length < 2 && (
         <div className="flex items-center justify-center gap-4">
           <Button
             className="bg-background text-black hover:bg-background/80"
             disabled={page === 1}
-            onClick={handlePreviousClick}
+            onClick={() => setPage(page - 1)}
           >
             Anterior
           </Button>
 
           <span className="text-background">
-            Página {page} de {pages}
+            Página {page} de {Math.floor(cards.length / pageLimit) + 1}
           </span>
 
           <Button
             className="bg-background text-black hover:bg-background/80"
-            disabled={page === pages}
-            onClick={handleNextClick}
+            disabled={page === Math.floor(cards.length / pageLimit) + 1}
+            onClick={() => setPage(page + 1)}
           >
             Próxima
           </Button>
