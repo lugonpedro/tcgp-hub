@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 
 export default function Card() {
   const { id } = useParams();
-  const [data, setData] = useState<Card>();
+  const [data, setData] = useState<CardProps>();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function Card() {
       const q = query(collection(db, "cards"), where("id", "==", id), limit(1));
       const querySnapshot = await getDocs(q);
 
-      const card = querySnapshot.docs[0].data() as Card;
+      const card = querySnapshot.docs[0].data() as CardProps;
 
       setData(card);
       console.log(card);

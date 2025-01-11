@@ -10,8 +10,8 @@ type State = {
 
 type Actions = {
   getUserCards: (user: User | null) => void;
-  add: (card: Card) => void;
-  remove: (card: Card) => void;
+  add: (card: CardProps) => void;
+  remove: (card: CardProps) => void;
 };
 
 export const useCardsContext = create(

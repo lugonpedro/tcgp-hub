@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 
 export default function Tracker() {
   const { user } = authContext();
-  const [data, setData] = useState<Card[]>([]);
+  const [data, setData] = useState<CardProps[]>([]);
   const [userCards, setUserCards] = useState<string[]>([]);
 
   const [set, setSet] = useState<string>();
@@ -35,10 +35,10 @@ export default function Tracker() {
       const q = query(collection(db, "cards"), where("set", "==", set));
       const querySnapshot = await getDocs(q);
 
-      const cards: Card[] = [];
+      const cards: CardProps[] = [];
       await Promise.all(
         querySnapshot.docs.map(async (doc) => {
-          cards.push(doc.data() as Card);
+          cards.push(doc.data() as CardProps);
         })
       );
 
@@ -58,7 +58,7 @@ export default function Tracker() {
   const packages = useMemo(() => {
     if (!actualUserCards) return [];
 
-    const uniquePackages: Package[] = [];
+    const uniquePackages: PackProps[] = [];
     const packageSet = new Set();
 
     for (const card of actualUserCards) {

@@ -2,7 +2,7 @@ import { CircleCheck } from "lucide-react";
 import { motion } from "motion/react";
 import { ButtonHTMLAttributes } from "react";
 interface PokeCardProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  poke: Card;
+  poke: CardProps;
   owned: boolean;
   onClick: () => void;
 }

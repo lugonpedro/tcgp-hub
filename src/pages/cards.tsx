@@ -15,10 +15,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function Cards() {
   const { user } = authContext();
-  const [data, setData] = useState<Card[]>([]);
+  const [data, setData] = useState<CardProps[]>([]);
   const { cards, add, remove, getUserCards } = useCardsContext();
   const [search, setSearch] = useState("");
-  const [filtered, setFiltered] = useState<Card[]>([]);
+  const [filtered, setFiltered] = useState<CardProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingAdd, setLoadingAdd] = useState<boolean>(false);
 
@@ -60,10 +60,10 @@ export default function Cards() {
     const q = query(collection(db, "cards"), where("name", ">=", search), limit(20));
     const querySnapshot = await getDocs(q);
 
-    const cards: Card[] = [];
+    const cards: CardProps[] = [];
     await Promise.all(
       querySnapshot.docs.map(async (doc) => {
-        cards.push(doc.data() as Card);
+        cards.push(doc.data() as CardProps);
       })
     );
 
@@ -96,7 +96,7 @@ export default function Cards() {
     setPage((prev) => prev + 1);
   };
 
-  async function onClick(poke: Card) {
+  async function onClick(poke: CardProps) {
     if (!user) {
       toast({
         description: "Você precisa estar logado para adicionar cartas a sua coleção",
@@ -120,7 +120,7 @@ export default function Cards() {
     setLoadingAdd(false);
   }
 
-  async function addCardToCollection(poke: Card) {
+  async function addCardToCollection(poke: CardProps) {
     add(poke)
     await addDoc(collection(db, "collections"), {
       card_id: poke.id,
@@ -128,7 +128,7 @@ export default function Cards() {
     });
   }
 
-  async function removeCardFromCollection(poke: Card) {
+  async function removeCardFromCollection(poke: CardProps) {
     const q = query(collection(db, "collections"), where("user_id", "==", user!.uid), where("card_id", "==", poke.id));
     const querySnapshot = await getDocs(q);
 

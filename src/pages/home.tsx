@@ -13,10 +13,10 @@ import { useNavigate } from "react-router-dom";
 
 function Home() {
   const { user } = authContext();
-  const [data, setData] = useState<Card[]>([]);
+  const [data, setData] = useState<CardProps[]>([]);
   const { cards, getUserCards } = useCardsContext();
   const [search, setSearch] = useState("");
-  const [filtered, setFiltered] = useState<Card[]>([]);
+  const [filtered, setFiltered] = useState<CardProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -56,10 +56,10 @@ function Home() {
     const q = query(collection(db, "cards"), where("name", ">=", search), limit(20));
     const querySnapshot = await getDocs(q);
 
-    const cards: Card[] = [];
+    const cards: CardProps[] = [];
     await Promise.all(
       querySnapshot.docs.map(async (doc) => {
-        cards.push(doc.data() as Card);
+        cards.push(doc.data() as CardProps);
       })
     );
 

@@ -1,18 +1,18 @@
-interface Rarity {
+interface RarityProps {
   rarity: number;
   type: string;
 }
 
-interface Attack {
+interface AttackProps {
   costs: string[];
   damage: string;
 }
 
-interface Attacks {
-  [key: string]: Attack;
+interface AttacksProps {
+  [key: string]: AttackProps;
 }
 
-interface Card {
+interface CardProps {
   id: string;
   href: string;
   set: string;
@@ -29,12 +29,12 @@ interface Card {
   createdAt: string;
 }
 
-interface Pack {
+interface PackProps {
   name: string;
   img: string;
 }
 
-interface Set {
+interface SetProps {
   id: string;
   name: string;
   img: string;

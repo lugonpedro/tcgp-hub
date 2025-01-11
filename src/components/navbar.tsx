@@ -51,7 +51,7 @@ function NavbarLinks() {
   return (
     <>
       <NavbarItem icon={<Home size={14} />} title="Início" link="/" />
-      <NavbarItem icon={<SquareLibrary size={14} />} title="Cartas" link="/cards" soon />
+      <NavbarItem icon={<SquareLibrary size={14} />} title="Cartas" link="/cards" />
       <NavbarItem icon={<ChartSpline size={14} />} title="Rastreio" link="/tracker" soon />
       <NavbarItem icon={<WalletCards size={14} />} title="Decks" link="/decks" soon />
       <NavbarItem icon={<Handshake size={14} />} title="Trocas" link="/trades" soon />
