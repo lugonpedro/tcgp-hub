@@ -7,6 +7,7 @@ import Login from "./pages/auth/login";
 import Profile from "./pages/profile";
 import Tracker from "./pages/tracker";
 import Cards from "./pages/cards";
+import Card from "./pages/card";
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
       {
         path: "/cards",
         element: <Cards />,
+      },
+      {
+        path: "/cards/:id",
+        element: <Card />,
       },
       {
         path: "/profile",
