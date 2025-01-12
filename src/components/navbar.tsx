@@ -39,7 +39,7 @@ export default function Navbar() {
         <NavbarDesktop user={user} />
       </div>
       <div className="bg-primary min-h-screen">
-        <main className="p-4 flex flex-col items-center xl:ml-56">
+        <main className="flex justify-center mt-16 p-4 xl:ml-56 xl:mt-0">
           <Outlet />
         </main>
       </div>
@@ -47,14 +47,14 @@ export default function Navbar() {
   );
 }
 
-function NavbarLinks() {
+function NavbarLinks({ ...props }: { onClick?: () => void }) {
   return (
     <>
-      <NavbarItem icon={<Home size={14} />} title="Início" link="/" />
-      <NavbarItem icon={<SquareLibrary size={14} />} title="Cartas" link="/cards" />
-      <NavbarItem icon={<ChartSpline size={14} />} title="Rastreio" link="/tracker" />
-      <NavbarItem icon={<WalletCards size={14} />} title="Decks" link="/decks" soon />
-      <NavbarItem icon={<Handshake size={14} />} title="Trocas" link="/trades" soon />
+      <NavbarItem icon={<Home size={14} />} title="Início" link="/" {...props} />
+      <NavbarItem icon={<SquareLibrary size={14} />} title="Cartas" link="/cards" {...props} />
+      <NavbarItem icon={<ChartSpline size={14} />} title="Rastreio" link="/tracker" {...props} />
+      <NavbarItem icon={<WalletCards size={14} />} title="Decks" link="/decks" soon {...props} />
+      <NavbarItem icon={<Handshake size={14} />} title="Trocas" link="/trades" soon {...props} />
     </>
   );
 }
@@ -118,7 +118,7 @@ function NavbarMobile({ user }: { user: User | null }) {
               opened ? "pointer-events-auto" : "pointer-events-none"
             }`}
           >
-            <NavbarLinks />
+            <NavbarLinks onClick={() => setOpened(false)} />
             <Separator />
             <NavbarItem
               title={user ? "Sair" : "Entrar"}
@@ -154,7 +154,8 @@ function NavbarItem(props: NavbarItemProps) {
   if (props.link) {
     return (
       <Link
-        to={props.soon ? '#' : props.link}
+        {...props}
+        to={props.soon ? "#" : props.link}
         className={`flex w-full items-center px-3 py-2 duration-300 hover:bg-mainBlue/30 ${
           actualPage === props.link || actualPage === props.link ? "bg-mainBlue/30 hover:bg-mainBlue/30" : ""
         }`}
@@ -169,6 +170,7 @@ function NavbarItem(props: NavbarItemProps) {
   if (!props.link) {
     return (
       <div
+        {...props}
         className="flex w-full cursor-pointer items-center px-3 py-2 duration-300 hover:bg-mainBlue/30"
         onClick={props.onClick}
       >

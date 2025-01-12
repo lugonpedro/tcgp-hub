@@ -1,6 +1,6 @@
 import Loading from "@/components/loading";
+import Paginator from "@/components/paginator";
 import { PokeCard } from "@/components/poke-card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ToastAction } from "@/components/ui/toast";
 import { authContext } from "@/contexts/auth-context";
@@ -100,8 +100,8 @@ export default function Cards() {
   return (
     <div>
       <div className="mb-8 text-background">
-        <h1 className="text-3xl">TCGP Hub</h1>
-        <p>Veja seu progresso de coleção, compartilhe com os amigos, monte decks compartilhaveis e mais!</p>
+        <h1 className="text-3xl">Minhas cartas</h1>
+        <p>Gerencie sua coleção</p>
       </div>
       <Input
         placeholder="Pesquisar..."
@@ -109,33 +109,13 @@ export default function Cards() {
         onChange={(e) => setSearch(e.target.value)}
         className="mb-8 text-background"
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-[780px] mb-8">
+      <div className="cardsContainer">
         {actualCards!.map((card) => (
           <PokeCard key={card.id} poke={card} owned={myCards.includes(card.id)} onClick={() => onClick(card)} disabled={loadingCard} />
         ))}
       </div>
       {search.length < 2 && (
-        <div className="flex items-center justify-center gap-4">
-          <Button
-            className="bg-background text-black hover:bg-background/80"
-            disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-          >
-            Anterior
-          </Button>
-
-          <span className="text-background">
-            Página {page} de {Math.floor(cards.length / pageLimit) + 1}
-          </span>
-
-          <Button
-            className="bg-background text-black hover:bg-background/80"
-            disabled={page === Math.floor(cards.length / pageLimit) + 1}
-            onClick={() => setPage(page + 1)}
-          >
-            Próxima
-          </Button>
-        </div>
+        <Paginator page={page} setPage={setPage} cards={cards} pageLimit={pageLimit} />
       )}
     </div>
   );

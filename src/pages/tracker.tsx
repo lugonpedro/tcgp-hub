@@ -70,7 +70,11 @@ export default function Tracker() {
   }
 
   return (
-    <>
+    <div className="md:w-full">
+      <div className="mb-8 text-background">
+        <h1 className="text-3xl">Rastreio</h1>
+        <p>Veja a quantidade obtida e faltando para cada set</p>
+      </div>
       <Select onValueChange={(e) => setSetId(e)} value={setId}>
         <SelectTrigger className="text-background w-full mb-8">
           <SelectValue placeholder="Set" />
@@ -101,13 +105,13 @@ export default function Tracker() {
               },
             ]}
           />
-          {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-[780px] mb-8">
+          {/* <div className="cardsContainer">
             {setCards.map((card) => (
               <PokeCard key={card.id} poke={card} owned={myCards.includes(card.id)} onClick={() => {}} />
             ))}
           </div> */}
         </>
       )}
-    </>
+    </div>
   );
 }

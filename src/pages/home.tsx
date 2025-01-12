@@ -1,15 +1,13 @@
 import Loading from "@/components/loading";
+import Paginator from "@/components/paginator";
 import { PokeCard } from "@/components/poke-card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { authContext } from "@/contexts/auth-context";
 import { useCardsContext } from "@/contexts/cards-contex";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const { user } = authContext();
-  const { cards, getCards, myCards, getMyCards } = useCardsContext();
+  const { cards, getCards } = useCardsContext();
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState(1);
@@ -22,12 +20,6 @@ function Home() {
     getCards();
     setLoading(false);
   }, []);
-
-  useEffect(() => {
-    setLoading(true);
-    getMyCards(user);
-    setLoading(false);
-  }, [user]);
 
   const actualCards = useMemo(() => {
     if (search.length > 2) {
@@ -57,39 +49,16 @@ function Home() {
         onChange={(e) => setSearch(e.target.value)}
         className="mb-8 text-background"
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-[780px] mb-8">
+      <div className="cardsContainer">
         {actualCards!.map((card) => (
           <PokeCard
             key={card.id}
             poke={card}
-            owned={myCards.includes(card.id)}
             onClick={() => navigate("/cards/" + card.id)}
           />
         ))}
       </div>
-      {search.length < 2 && (
-        <div className="flex items-center justify-center gap-4">
-          <Button
-            className="bg-background text-black hover:bg-background/80"
-            disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-          >
-            Anterior
-          </Button>
-
-          <span className="text-background">
-            Página {page} de {Math.floor(cards.length / pageLimit) + 1}
-          </span>
-
-          <Button
-            className="bg-background text-black hover:bg-background/80"
-            disabled={page === Math.floor(cards.length / pageLimit) + 1}
-            onClick={() => setPage(page + 1)}
-          >
-            Próxima
-          </Button>
-        </div>
-      )}
+      {search.length < 2 && <Paginator page={page} setPage={setPage} cards={cards} pageLimit={pageLimit} />}
     </div>
   );
 }
