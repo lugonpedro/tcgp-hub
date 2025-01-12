@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { authContext } from "@/contexts/auth-context";
 import { auth } from "@/services/firebase";
 import { User } from "firebase/auth";
-import { ChartSpline, Handshake, Home, Menu, SquareLibrary, User as UserIcon, WalletCards, X } from "lucide-react";
+import { ChartSpline, Cookie, Handshake, Home, Menu, SquareLibrary, User as UserIcon, WalletCards, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { ReactNode, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
@@ -38,7 +38,7 @@ export default function Navbar() {
       <div className="hidden xl:block">
         <NavbarDesktop user={user} />
       </div>
-      <div className="bg-primary min-h-screen">
+      <div className="bg-primary text-secondary min-h-screen">
         <main className="flex justify-center mt-16 p-4 xl:ml-56 xl:mt-0">
           <Outlet />
         </main>
@@ -55,6 +55,7 @@ function NavbarLinks({ ...props }: { onClick?: () => void }) {
       <NavbarItem icon={<ChartSpline size={14} />} title="Rastreio" link="/tracker" {...props} />
       <NavbarItem icon={<WalletCards size={14} />} title="Decks" link="/decks" soon {...props} />
       <NavbarItem icon={<Handshake size={14} />} title="Trocas" link="/trades" soon {...props} />
+      <NavbarItem icon={<Cookie size={14} />} title="Sobre" link="/about" {...props} />
     </>
   );
 }
