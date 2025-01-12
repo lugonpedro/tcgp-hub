@@ -34,12 +34,12 @@ function Home() {
   }
 
   if (!loading && !cards) {
-    return <div className="text-background">Nenhuma carta encontrada</div>;
+    return <div className="text-secondary">Nenhuma carta encontrada</div>;
   }
 
   return (
     <div>
-      <div className="mb-8 text-background">
+      <div className="mb-8 text-secondary">
         <h1 className="text-3xl">TCGP Hub</h1>
         <p>Veja seu progresso de coleção, compartilhe com os amigos, monte decks compartilhaveis e mais!</p>
       </div>
@@ -47,7 +47,7 @@ function Home() {
         placeholder="Pesquisar..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="mb-8 text-background"
+        className="mb-8 text-secondary"
       />
       <div className="cardsContainer">
         {actualCards!.map((card) => (

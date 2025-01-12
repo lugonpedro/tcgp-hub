@@ -5,7 +5,7 @@ export default function Profile() {
   const { user } = authContext();
 
   if (!user) {
-    return <div className="text-background">Faça login para ver e editar seu perfil</div>;
+    return <div className="text-secondary">Faça login para ver e editar seu perfil</div>;
   }
 
   return (
@@ -13,7 +13,7 @@ export default function Profile() {
       <p>Avatar</p>
       <p>Email disabled</p>
       <p>Id</p>
-      <Input className="text-background" />
+      <Input className="text-secondary" />
     </div>
   );
 }

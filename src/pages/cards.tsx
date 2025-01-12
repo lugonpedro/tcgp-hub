@@ -2,6 +2,7 @@ import Loading from "@/components/loading";
 import Paginator from "@/components/paginator";
 import { PokeCard } from "@/components/poke-card";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { ToastAction } from "@/components/ui/toast";
 import { authContext } from "@/contexts/auth-context";
 import { useCardsContext } from "@/contexts/cards-contex";
@@ -94,20 +95,24 @@ export default function Cards() {
   }
 
   if (!loading && !cards) {
-    return <div className="text-background">Nenhuma carta encontrada</div>;
+    return <div className="text-secondary">Nenhuma carta encontrada</div>;
   }
 
   return (
     <div>
-      <div className="mb-8 text-background">
+      <div className="mb-8 text-secondary">
         <h1 className="text-3xl">Minhas cartas</h1>
         <p>Gerencie sua coleção</p>
+        <div>
+        <Switch />
+        <span>Lista</span>
+        </div>
       </div>
       <Input
         placeholder="Pesquisar..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="mb-8 text-background"
+        className="mb-8 text-secondary"
       />
       <div className="cardsContainer">
         {actualCards!.map((card) => (

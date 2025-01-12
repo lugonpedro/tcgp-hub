@@ -29,11 +29,11 @@ export default function Card() {
   }
 
   if (!loading && !data) {
-    return <div className="text-background">Carta não encontrada</div>;
+    return <div className="text-secondary">Carta não encontrada</div>;
   }
 
   return (
-    <div className="text-background">
+    <div className="text-secondary">
       <img src={data!.img} />
       <p>{data!.name}</p>
       <p>HP: {data!.hp}</p>

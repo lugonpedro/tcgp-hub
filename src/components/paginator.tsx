@@ -11,19 +11,19 @@ export default function Paginator({ page, setPage, cards, pageLimit }: Paginator
   return (
     <div className="flex items-center justify-center gap-4">
       <Button
-        className="bg-background text-black hover:bg-background/80"
+        className="bg-secondary text-black hover:bg-secondary/80"
         disabled={page === 1}
         onClick={() => setPage(page - 1)}
       >
         &#60;
       </Button>
 
-      <span className="text-background">
+      <span className="text-secondary">
         Página {page} de {Math.floor(cards.length / pageLimit) + 1}
       </span>
 
       <Button
-        className="bg-background text-black hover:bg-background/80"
+        className="bg-secondary text-black hover:bg-secondary/80"
         disabled={page === Math.floor(cards.length / pageLimit) + 1}
         onClick={() => setPage(page + 1)}
       >

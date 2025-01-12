@@ -62,21 +62,21 @@ export default function Tracker() {
   }, [set, groupedByPackage]);
 
   if (!user) {
-    return <p className="text-background">Faça login para ver suas estatísticas</p>;
+    return <p className="text-secondary">Faça login para ver suas estatísticas</p>;
   }
 
   if (!sets) {
-    return <p className="text-background">Nenhum set encontrado</p>;
+    return <p className="text-secondary">Nenhum set encontrado</p>;
   }
 
   return (
     <div className="md:w-full">
-      <div className="mb-8 text-background">
+      <div className="mb-8 text-secondary">
         <h1 className="text-3xl">Rastreio</h1>
         <p>Veja a quantidade obtida e faltando para cada set</p>
       </div>
       <Select onValueChange={(e) => setSetId(e)} value={setId}>
-        <SelectTrigger className="text-background w-full mb-8">
+        <SelectTrigger className="text-secondary w-full mb-8">
           <SelectValue placeholder="Set" />
         </SelectTrigger>
         <SelectContent>
@@ -87,7 +87,7 @@ export default function Tracker() {
           ))}
         </SelectContent>
       </Select>
-      {!set && <p className="text-background">Selecione um set</p>}
+      {!set && <p className="text-secondary">Selecione um set</p>}
       {set && (
         <>
           <StackedBarChart
