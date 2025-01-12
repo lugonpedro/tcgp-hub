@@ -18,7 +18,7 @@ function Home() {
   useEffect(() => {
     setLoading(true);
     getCards();
-    setLoading(false);
+    // setLoading(false);
   }, []);
 
   const actualCards = useMemo(() => {
