@@ -1,5 +1,5 @@
 import { db } from "@/services/firebase";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { create } from "zustand";
 
 type State = {
@@ -14,7 +14,7 @@ export const useSetsContext = create<State & Actions>(
   (set) => ({
     sets: [],
     getSets: async () => {
-      const q = query(collection(db, "sets"));
+      const q = query(collection(db, "sets"), orderBy("createdAt", "asc"));
       const querySnapshot = await getDocs(q);
 
       const setsArr: SetProps[] = [];

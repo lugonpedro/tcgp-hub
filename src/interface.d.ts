@@ -20,10 +20,10 @@ interface CardProps {
   name: string;
   hp?: string;
   type: string;
-  rarity: Rarity;
-  package: Pack[];
+  rarity: RarityProps;
+  package: PackProps[];
   ability: Record<string, unknown>;
-  attacks: Attacks;
+  attacks: AttacksProps;
   weaknesses: string[];
   retreatCost: string[];
   createdAt: string;
@@ -38,5 +38,5 @@ interface SetProps {
   id: string;
   name: string;
   img: string;
-  packs: Pack[];
+  packs: PackProps[];
 }

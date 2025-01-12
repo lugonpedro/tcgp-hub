@@ -1,131 +1,113 @@
+import StackedBarChart from "@/components/stacked-bar-chart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { authContext } from "@/contexts/auth-context";
-import { db } from "@/services/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { useCardsContext } from "@/contexts/cards-contex";
+import { useSetsContext } from "@/contexts/sets-context";
 import { useEffect, useMemo, useState } from "react";
 
 export default function Tracker() {
   const { user } = authContext();
-  const [data, setData] = useState<CardProps[]>([]);
-  const [userCards, setUserCards] = useState<string[]>([]);
+  const { sets, getSets } = useSetsContext();
+  const { cards, getCards, myCards, getMyCards } = useCardsContext();
 
-  const [set, setSet] = useState<string>();
+  const [setId, setSetId] = useState<string>();
+  const [set, setSet] = useState<SetProps | undefined>();
 
   useEffect(() => {
-    async function getUserCards() {
-      const q = query(collection(db, "collections"), where("user_id", "==", user!.uid));
-      const querySnapshot = await getDocs(q);
-
-      const cards: string[] = [];
-      await Promise.all(
-        querySnapshot.docs.map(async (doc) => {
-          cards.push(doc.data().card_id);
-        })
-      );
-
-      setUserCards(cards);
-    }
-
     if (!user) return;
-    getUserCards();
+    getCards();
+    getSets();
   }, [user]);
 
   useEffect(() => {
-    async function getSetData() {
-      const q = query(collection(db, "cards"), where("set", "==", set));
-      const querySnapshot = await getDocs(q);
+    getMyCards(user);
+  }, [user]);
 
-      const cards: CardProps[] = [];
-      await Promise.all(
-        querySnapshot.docs.map(async (doc) => {
-          cards.push(doc.data() as CardProps);
-        })
-      );
+  useMemo(() => {
+    if (!setId || !sets) return;
+    const thisSet = sets.find((set) => set.id === setId);
+    setSet(thisSet);
+  }, [setId]);
 
-      setData(cards);
-    }
+  const setCards = useMemo(() => {
+    if (!cards || !myCards || !setId) return [];
+    return cards.filter((card) => card.set === setId);
+  }, [cards, myCards, setId]);
 
-    if (!set) return;
-    getSetData();
-  }, [set]);
-
-  const actualUserCards = useMemo(() => {
-    if (!data || !userCards) return [];
-    const cards = data.filter((card) => userCards.includes(card.id));
-    return cards;
-  }, [userCards, data]);
-
-  const packages = useMemo(() => {
-    if (!actualUserCards) return [];
-
-    const uniquePackages: PackProps[] = [];
-    const packageSet = new Set();
-
-    for (const card of actualUserCards) {
-      for (const pack of card.package) {
-        if (!packageSet.has(pack.name)) {
-          packageSet.add(pack.name);
-          uniquePackages.push(pack);
+  const groupedByPackage = useMemo(() => {
+    return setCards.reduce((acc, card) => {
+      card.package.forEach(pkg => {
+        const { name } = pkg;
+        if (!acc[name]) {
+          acc[name] = [];
         }
-      }
-    }
+        acc[name].push(card);
+      });
+      return acc;
+    }, {} as { [key: string]: CardProps[] });
+  }, [setCards]);
 
-    return uniquePackages;
-  }, [actualUserCards]);
-
-  const userCardsPerPackage = useMemo(() => {
-    if (!actualUserCards || !packages) return [];
-
-    const cardsPerPackage: Record<string, number> = {};
-    for (const card of actualUserCards) {
-      for (const pack of card.package) {
-        if (cardsPerPackage[pack.name]) {
-          cardsPerPackage[pack.name]++;
-        } else {
-          cardsPerPackage[pack.name] = 1;
-        }
-      }
-    }
-    console.log(cardsPerPackage);
-    return cardsPerPackage;
-  }, [actualUserCards, packages]);
+  const ownedCards = useMemo(() => {
+    if(!set || !groupedByPackage) return []
+    return set.packs.map((p) => {
+      return groupedByPackage[p.name]?.filter(card => myCards.includes(card.id)).length
+    });
+  }, [set, groupedByPackage])
+  
+  const missingCards = useMemo(() => {
+    if (!set || !groupedByPackage) return [];
+    return set.packs.map((p) => {
+      return groupedByPackage[p.name]?.filter(card => !myCards.includes(card.id)).length;
+    });
+  }, [set, groupedByPackage]);
 
   if (!user) {
     return <p className="text-background">Faça login para ver suas estatísticas</p>;
   }
 
+  if (!sets) {
+    return <p className="text-background">Nenhum set encontrado</p>;
+  }
+
   return (
     <>
-      <Select onValueChange={(e) => setSet(e)} value={set}>
-        <SelectTrigger className="text-background w-full">
+      <Select onValueChange={(e) => setSetId(e)} value={setId}>
+        <SelectTrigger className="text-background w-full mb-8">
           <SelectValue placeholder="Set" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="a1">Genetic Apex</SelectItem>
-          <SelectItem value="a1a">Mythical Island</SelectItem>
+          {sets.map((s) => (
+            <SelectItem value={s.id} key={s.id}>
+              {s.name}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
-      {actualUserCards.length > 0 && (
-        <div className="text-background mt-4 w-full">
-          <div className="flex flex-col gap-4">
-            {packages.map((pack, index) => (
-              <div key={index} className="flex items-center">
-                <img src={pack.img} alt={pack.name} className="h-12" />
-                <p>{(userCardsPerPackage as Record<string, number>)[pack.name]}</p>
-              </div>
+      {!set && <p className="text-background">Selecione um set</p>}
+      {set && (
+        <>
+          <StackedBarChart
+            labels={set.packs.map((p) => p.name)}
+            datasets={[
+              {
+                label: "Adquiridas",
+                data: ownedCards,
+                backgroundColor: "white",
+              },
+              {
+                label: "Faltando",
+                data: missingCards,
+                backgroundColor: "gray",
+              },
+            ]}
+          />
+          {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-[780px] mb-8">
+            {setCards.map((card) => (
+              <PokeCard key={card.id} poke={card} owned={myCards.includes(card.id)} onClick={() => {}} />
             ))}
-            <p>
-              Total: {actualUserCards.length}/{data.length}
-            </p>
-          </div>
-        </div>
+          </div> */}
+        </>
       )}
-      {userCards.length > 0 &&
-        actualUserCards.map((card) => {
-          return <p>{card.name}</p>;
-        })}
-
-      {JSON.stringify(userCardsPerPackage)}
     </>
   );
 }

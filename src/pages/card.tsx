@@ -18,7 +18,6 @@ export default function Card() {
       const card = querySnapshot.docs[0].data() as CardProps;
 
       setData(card);
-      console.log(card);
       setLoading(false);
     }
 

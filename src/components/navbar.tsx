@@ -52,7 +52,7 @@ function NavbarLinks() {
     <>
       <NavbarItem icon={<Home size={14} />} title="Início" link="/" />
       <NavbarItem icon={<SquareLibrary size={14} />} title="Cartas" link="/cards" />
-      <NavbarItem icon={<ChartSpline size={14} />} title="Rastreio" link="/tracker" soon />
+      <NavbarItem icon={<ChartSpline size={14} />} title="Rastreio" link="/tracker" />
       <NavbarItem icon={<WalletCards size={14} />} title="Decks" link="/decks" soon />
       <NavbarItem icon={<Handshake size={14} />} title="Trocas" link="/trades" soon />
     </>
@@ -154,7 +154,7 @@ function NavbarItem(props: NavbarItemProps) {
   if (props.link) {
     return (
       <Link
-        to={props.link}
+        to={props.soon ? '#' : props.link}
         className={`flex w-full items-center px-3 py-2 duration-300 hover:bg-mainBlue/30 ${
           actualPage === props.link || actualPage === props.link ? "bg-mainBlue/30 hover:bg-mainBlue/30" : ""
         }`}
