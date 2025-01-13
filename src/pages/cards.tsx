@@ -45,7 +45,7 @@ export default function Cards() {
     } else {
       return cards.slice((page - 1) * pageLimit, page * pageLimit);
     }
-  }, [search, page]);
+  }, [search, page, cards, myCards]);
 
   async function onClick(poke: CardProps) {
     if (!user) {

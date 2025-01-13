@@ -27,7 +27,7 @@ function Home() {
     } else {
       return cards.slice((page - 1) * pageLimit, page * pageLimit);
     }
-  }, [search, page]);
+  }, [search, page, cards]);
 
   if (loading) {
     return <Loading />;
