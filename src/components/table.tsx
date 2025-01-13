@@ -2,44 +2,12 @@ import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack
 
 import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table as TableShad } from "@/components/ui/table";
 
-type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
+interface TableProps<T> {
+  data: T[];
+  columns: ColumnDef<T>[];
+}
 
-export const data: Payment[] = [
-  {
-    id: "728ed52f",
-    amount: 100,
-    status: "pending",
-    email: "m@example.com",
-  },
-  {
-    id: "489e1d42",
-    amount: 125,
-    status: "processing",
-    email: "example@gmail.com",
-  },
-];
-
-export const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "amount",
-    header: "Amount",
-  },
-];
-
-export default function Table() {
+export default function Table<T>({ data, columns }: TableProps<T>) {
   const table = useReactTable({
     data,
     columns,

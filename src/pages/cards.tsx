@@ -2,14 +2,14 @@ import Loading from "@/components/loading";
 import Paginator from "@/components/paginator";
 import { PokeCard } from "@/components/poke-card";
 import Table from "@/components/table";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { ToastAction } from "@/components/ui/toast";
 import { authContext } from "@/contexts/auth-context";
-import { useCardsContext } from "@/contexts/cards-contex";
+import { CardWithOwned, useCardsContext } from "@/contexts/cards-contex";
 import { useToast } from "@/hooks/use-toast";
-import { db } from "@/services/firebase";
-import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
+import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +22,7 @@ export default function Cards() {
   const [page, setPage] = useState(1);
   const pageLimit = 20;
 
-  const [list, setList] = useState<boolean>(false);
+  const [list, setList] = useState<boolean>(true);
 
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -47,7 +47,7 @@ export default function Cards() {
     }
   }, [search, page, cards, myCards]);
 
-  async function onClick(poke: CardProps) {
+  async function onClick(poke: CardWithOwned) {
     if (!user) {
       toast({
         description: "Você precisa estar logado para adicionar cartas a sua coleção",
@@ -63,35 +63,59 @@ export default function Cards() {
     setLoadingCard(true);
 
     if (myCards.includes(poke.id)) {
-      await remove(poke);
+      await removeFromMyCards(user, poke);
     } else {
-      await add(poke);
+      await addToMyCards(user, poke);
     }
 
     setLoadingCard(false);
   }
 
-  async function add(poke: CardProps) {
-    addToMyCards(poke);
-    await addDoc(collection(db, "collections"), {
-      card_id: poke.id,
-      user_id: user!.uid,
-    });
-  }
-
-  async function remove(poke: CardProps) {
-    const q = query(collection(db, "collections"), where("user_id", "==", user!.uid), where("card_id", "==", poke.id));
-    const querySnapshot = await getDocs(q);
-
-    if (!querySnapshot.empty) {
-      querySnapshot.forEach(async (document) => {
-        await deleteDoc(doc(db, "collections", document.id));
-      });
-      removeFromMyCards(poke);
-    } else {
-      toast({ description: "Algo deu errado, tente novamente", variant: "destructive" });
-    }
-  }
+  const columns: ColumnDef<CardWithOwned>[] = [
+    {
+      accessorKey: "owned",
+      header: "",
+      cell: (el) => (
+        <Checkbox
+          checked={el.row.original.owned}
+          className="bg-secondary data-[state=checked]:bg-green-500 data-[state=checked]:text-primary"
+          onClick={() => onClick(el.row.original)}
+          disabled={loadingCard}
+        />
+      ),
+    },
+    {
+      accessorKey: "id",
+      header: "ID",
+    },
+    {
+      accessorKey: "img",
+      header: "Img",
+      cell: (el) => (
+        <>
+          <img src={el.row.original.img} className="h-12" />
+        </>
+      ),
+    },
+    {
+      accessorKey: "name",
+      header: "Nome",
+    },
+    {
+      accessorKey: "rarity",
+      header: "Raridade",
+      cell: (el) => (
+        <>
+          <>{el.row.original.rarity.rarity}</>
+          <>{el.row.original.rarity.type}</>
+        </>
+      ),
+    },
+    {
+      accessorKey: "set",
+      header: "Set",
+    },
+  ];
 
   if (loading) {
     return <Loading />;
@@ -107,7 +131,11 @@ export default function Cards() {
         <h1 className="text-3xl">Minhas cartas</h1>
         <p>Gerencie sua coleção</p>
         <div>
-          <Switch checked={list} onCheckedChange={() => setList(!list)} />
+          <Switch
+            checked={list}
+            onCheckedChange={() => setList(!list)}
+            className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"
+          />
           <span>Lista</span>
         </div>
       </div>
@@ -120,15 +148,9 @@ export default function Cards() {
       <div className="cardsContainer">
         {!list &&
           actualCards!.map((card) => (
-            <PokeCard
-              key={card.id}
-              poke={card}
-              owned={myCards.includes(card.id)}
-              onClick={() => onClick(card)}
-              disabled={loadingCard}
-            />
+            <PokeCard key={card.id} poke={card} onClick={() => onClick(card)} disabled={loadingCard} />
           ))}
-        {list && <Table />}
+        {list && <Table data={actualCards} columns={columns} />}
       </div>
       {search.length < 2 && <Paginator page={page} setPage={setPage} cards={cards} pageLimit={pageLimit} />}
     </div>
