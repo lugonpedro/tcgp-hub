@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { ToastAction } from "@/components/ui/toast";
-import { authContext } from "@/contexts/auth-context";
+import { useAuthContext } from "@/contexts/auth-context";
 import { CardWithOwned, useCardsContext } from "@/contexts/cards-context";
 import { useToast } from "@/hooks/use-toast";
 import { ColumnDef } from "@tanstack/react-table";
@@ -14,7 +14,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function AllCards() {
-  const { user } = authContext();
+  const { user } = useAuthContext();
   const { loading, cards, getCards, myCards, getMyCards, addToMyCards, removeFromMyCards } = useCardsContext();
   const [search, setSearch] = useState("");
   const [loadingCard, setLoadingCard] = useState<boolean>(false);

@@ -3,7 +3,7 @@ import Paginator from "@/components/paginator";
 import { PokeCard } from "@/components/poke-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { authContext } from "@/contexts/auth-context";
+import { useAuthContext } from "@/contexts/auth-context";
 import { useCardsContext } from "@/contexts/cards-context";
 import { useToast } from "@/hooks/use-toast";
 import { CardProps } from "@/interfaces";
@@ -16,7 +16,7 @@ export default function NewDeck() {
   const [deck, setDeck] = useState<CardProps[]>([]);
 
   const { loading, cards, getCards } = useCardsContext();
-  const { user } = authContext();
+  const { user } = useAuthContext();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const pageLimit = 20;

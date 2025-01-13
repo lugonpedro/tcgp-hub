@@ -1,13 +1,13 @@
 import StackedBarChart from "@/components/stacked-bar-chart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { authContext } from "@/contexts/auth-context";
+import { useAuthContext } from "@/contexts/auth-context";
 import { useCardsContext } from "@/contexts/cards-context";
 import { useSetsContext } from "@/contexts/sets-context";
 import { CardProps, SetProps } from "@/interfaces";
 import { useEffect, useMemo, useState } from "react";
 
 export default function Tracker() {
-  const { user } = authContext();
+  const { user } = useAuthContext();
   const { sets, getSets } = useSetsContext();
   const { cards, getCards, myCards, getMyCards } = useCardsContext();
 

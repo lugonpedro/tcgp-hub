@@ -1,12 +1,12 @@
 import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
-import { authContext } from "@/contexts/auth-context";
+import { useAuthContext } from "@/contexts/auth-context";
 import { useCardsContext } from "@/contexts/cards-context";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function AllDecks() {
-  const { user } = authContext();
+  const { user } = useAuthContext();
   const navigate = useNavigate();
 
   const { loading, getCards } = useCardsContext();

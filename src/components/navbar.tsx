@@ -5,7 +5,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { authContext } from "@/contexts/auth-context";
+import { useAuthContext } from "@/contexts/auth-context";
 import { auth } from "@/services/firebase";
 import { User } from "firebase/auth";
 import {
@@ -24,14 +24,12 @@ import { ReactNode, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
-  const { user } = authContext();
+  const { user, setUser } = useAuthContext();
 
   useEffect(() => {
     const subscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        authContext.setState({
-          user: user,
-        });
+        setUser(user)
 
         return;
       }

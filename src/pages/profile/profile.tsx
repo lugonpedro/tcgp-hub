@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { authContext } from "@/contexts/auth-context";
+import { useAuthContext } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/services/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { PatternFormat } from "react-number-format";
 
 export default function Profile() {
-  const { user } = authContext();
+  const { user } = useAuthContext();
   const { toast } = useToast();
 
   const [name, setName] = useState<string>(user?.displayName ?? "");

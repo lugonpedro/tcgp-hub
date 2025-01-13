@@ -6,7 +6,7 @@ type AuthContextProps = {
   setUser: (user: User | null) => void;
 };
 
-export const authContext = create<AuthContextProps>((set) => ({
+export const useAuthContext = create<AuthContextProps>((set) => ({
   user: null,
   setUser: (user: User | null) => set(() => ({ user: user })),
 }));
