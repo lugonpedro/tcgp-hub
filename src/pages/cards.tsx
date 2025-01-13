@@ -152,7 +152,7 @@ export default function Cards() {
       <div className="cardsContainer">
         {!list &&
           actualCards!.map((card) => (
-            <PokeCard key={card.id} poke={card} onClick={() => onClick(card)} disabled={loadingCard} />
+            <PokeCard key={card.id} poke={card} onClick={() => onClick(card)} disabled={loadingCard} showOwned />
           ))}
         {list && <Table data={actualCards} columns={columns} />}
       </div>
