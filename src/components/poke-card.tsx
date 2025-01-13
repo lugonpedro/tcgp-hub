@@ -8,7 +8,7 @@ interface PokeCardProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   showOwned?: boolean;
 }
 
-export function PokeCard({ poke, showOwned,...props }: PokeCardProps) {
+export function PokeCard({ poke, showOwned, ...props }: PokeCardProps) {
   return (
     <motion.div
       whileHover={{

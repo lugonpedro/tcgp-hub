@@ -4,6 +4,7 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { create } from "zustand";
 
 type State = {
+  loading: boolean;
   sets: SetProps[];
 };
 
@@ -12,8 +13,10 @@ type Actions = {
 };
 
 export const useSetsContext = create<State & Actions>((set) => ({
+  loading: false,
   sets: [],
   getSets: async () => {
+    set({ loading: true });
     const q = query(collection(db, "sets"), orderBy("createdAt", "asc"));
     const querySnapshot = await getDocs(q);
 
@@ -24,6 +27,6 @@ export const useSetsContext = create<State & Actions>((set) => ({
       })
     );
 
-    set({ sets: setsArr });
+    set({ sets: setsArr, loading: false });
   },
 }));

@@ -7,18 +7,15 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const { cards, getCards } = useCardsContext();
+  const { loading, cards, getCards } = useCardsContext();
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const pageLimit = 20;
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setLoading(true);
     getCards();
-    setLoading(false);
   }, []);
 
   const actualCards = useMemo(() => {

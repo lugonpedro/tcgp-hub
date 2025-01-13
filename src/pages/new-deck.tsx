@@ -15,10 +15,9 @@ import { useNavigate } from "react-router-dom";
 export default function NewDeck() {
   const [deck, setDeck] = useState<CardProps[]>([]);
 
-  const { cards, getCards } = useCardsContext();
-  const {user} = authContext();
+  const { loading, cards, getCards } = useCardsContext();
+  const { user } = authContext();
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const pageLimit = 20;
 
@@ -26,9 +25,7 @@ export default function NewDeck() {
   const { toast } = useToast();
 
   useEffect(() => {
-    setLoading(true);
     getCards();
-    setLoading(false);
   }, []);
 
   const actualCards = useMemo(() => {
@@ -67,13 +64,13 @@ export default function NewDeck() {
       user_id: user!.uid,
       cards: deck.map((card) => card.id),
       created_at: serverTimestamp(),
-      upvote: 0
+      upvote: 0,
     });
-    toast({title: "Deck criado com sucesso", description: "Redirecionando para a página do deck"});
+    toast({ title: "Deck criado com sucesso", description: "Redirecionando para a página do deck" });
     setTimeout(() => {
       navigate(`/decks/${res.id}`);
-    }, 1500)
-    console.log(res.id)
+    }, 1500);
+    console.log(res.id);
   }
 
   if (loading) {

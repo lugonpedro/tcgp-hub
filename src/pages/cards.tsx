@@ -15,9 +15,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function Cards() {
   const { user } = authContext();
-  const { cards, getCards, myCards, getMyCards, addToMyCards, removeFromMyCards } = useCardsContext();
+  const { loading, cards, getCards, myCards, getMyCards, addToMyCards, removeFromMyCards } = useCardsContext();
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
   const [loadingCard, setLoadingCard] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const pageLimit = 20;
@@ -28,15 +27,11 @@ export default function Cards() {
   const { toast } = useToast();
 
   useEffect(() => {
-    setLoading(true);
     getCards();
-    setLoading(false);
   }, []);
 
   useEffect(() => {
-    setLoading(true);
     getMyCards(user);
-    setLoading(false);
   }, [user]);
 
   const actualCards = useMemo(() => {
