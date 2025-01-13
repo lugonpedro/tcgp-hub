@@ -104,12 +104,16 @@ export default function Cards() {
     {
       accessorKey: "rarity",
       header: "Raridade",
-      cell: (el) => (
-        <>
-          <>{el.row.original.rarity.rarity}</>
-          <>{el.row.original.rarity.type}</>
-        </>
-      ),
+      cell: (el) => {
+        const rarityCount = el.row.original.rarity.rarity;
+        return (
+          <div className="flex flex-row gap-0.5">
+            {Array.from({ length: rarityCount }).map((_, index) => (
+              <img key={index} src={`/${el.row.original.rarity.type}.png`} className="w-4 h-4" />
+            ))}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "set",
@@ -130,7 +134,7 @@ export default function Cards() {
       <div className="mb-8 text-secondary">
         <h1 className="text-3xl">Minhas cartas</h1>
         <p>Gerencie sua coleção</p>
-        <div>
+        <div className="flex items-center gap-1">
           <Switch
             checked={list}
             onCheckedChange={() => setList(!list)}
