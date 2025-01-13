@@ -1,8 +1,51 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { authContext } from "@/contexts/auth-context";
+import { useToast } from "@/hooks/use-toast";
+import { db } from "@/services/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { PatternFormat } from "react-number-format";
 
 export default function Profile() {
   const { user } = authContext();
+  const { toast } = useToast();
+
+  const [name, setName] = useState<string>(user?.displayName ?? "");
+  const [nick, setNick] = useState<string>("");
+  const [id, setId] = useState<string>("");
+
+  useEffect(() => {
+    async function loadProfile() {
+      const docRef = doc(db, "profiles", user!.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setName(docSnap.data()!.name);
+        setNick(docSnap.data()!.nick);
+        setId(docSnap.data()!.id);
+      }
+    }
+
+    if (!user) return;
+    loadProfile();
+  }, [user]);
+
+  async function saveProfile() {
+    try {
+      await setDoc(doc(db, "profiles", user!.uid), {
+        name: name,
+        nick: nick,
+        id: id.replace(/-/g, ""),
+      });
+      toast({ description: "Perfil salvo com sucesso" });
+    } catch (ex: unknown) {
+      toast({ description: "Algo deu errado, tente novamente", variant: "destructive" });
+    }
+  }
 
   if (!user) {
     return <div className="text-secondary">Faça login para ver e editar seu perfil</div>;
@@ -10,10 +53,43 @@ export default function Profile() {
 
   return (
     <div>
-      <p>Avatar</p>
-      <p>Email disabled</p>
-      <p>Id</p>
-      <Input className="text-secondary" />
+      <Card className="md:min-w-[500px]">
+        <CardHeader>
+          <CardTitle className="text-start text-2xl font-semibold">Meu Perfil</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <Avatar>
+            <AvatarImage src={user.photoURL ?? "./flip.png"} />
+            <AvatarFallback>{user.displayName ? user.displayName[0].toUpperCase() : "A"}</AvatarFallback>
+          </Avatar>
+          <div>
+            <Label>E-mail</Label>
+            <Input value={user.email ?? ""} disabled placeholder="E-mail" />
+          </div>
+          <div>
+            <Label>Nome</Label>
+            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome" />
+          </div>
+          <div>
+            <Label>Nick</Label>
+            <Input value={nick} onChange={(e) => setNick(e.target.value)} placeholder="Nick" />
+          </div>
+          <div>
+            <Label>ID</Label>
+            <PatternFormat
+              customInput={Input}
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              placeholder="ID"
+              format="####-####-####-####"
+              mask="_"
+            />
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button onClick={saveProfile}>Salvar</Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
