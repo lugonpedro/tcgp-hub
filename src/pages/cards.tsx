@@ -1,6 +1,7 @@
 import Loading from "@/components/loading";
 import Paginator from "@/components/paginator";
 import { PokeCard } from "@/components/poke-card";
+import Table from "@/components/table";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { ToastAction } from "@/components/ui/toast";
@@ -20,6 +21,8 @@ export default function Cards() {
   const [loadingCard, setLoadingCard] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const pageLimit = 20;
+
+  const [list, setList] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -104,8 +107,8 @@ export default function Cards() {
         <h1 className="text-3xl">Minhas cartas</h1>
         <p>Gerencie sua coleção</p>
         <div>
-        <Switch />
-        <span>Lista</span>
+          <Switch checked={list} onCheckedChange={() => setList(!list)} />
+          <span>Lista</span>
         </div>
       </div>
       <Input
@@ -115,13 +118,19 @@ export default function Cards() {
         className="mb-8 text-secondary"
       />
       <div className="cardsContainer">
-        {actualCards!.map((card) => (
-          <PokeCard key={card.id} poke={card} owned={myCards.includes(card.id)} onClick={() => onClick(card)} disabled={loadingCard} />
-        ))}
+        {!list &&
+          actualCards!.map((card) => (
+            <PokeCard
+              key={card.id}
+              poke={card}
+              owned={myCards.includes(card.id)}
+              onClick={() => onClick(card)}
+              disabled={loadingCard}
+            />
+          ))}
+        {list && <Table />}
       </div>
-      {search.length < 2 && (
-        <Paginator page={page} setPage={setPage} cards={cards} pageLimit={pageLimit} />
-      )}
+      {search.length < 2 && <Paginator page={page} setPage={setPage} cards={cards} pageLimit={pageLimit} />}
     </div>
   );
 }
