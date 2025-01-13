@@ -1,3 +1,4 @@
+import { CardProps, DeckProps } from "@/interfaces";
 import { db } from "@/services/firebase";
 import { User } from "firebase/auth";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";

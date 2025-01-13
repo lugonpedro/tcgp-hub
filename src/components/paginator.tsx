@@ -1,3 +1,4 @@
+import { CardProps } from "@/interfaces";
 import { Button } from "./ui/button";
 
 interface PaginatorProps {

@@ -37,7 +37,6 @@ export default function Deck() {
             </a>
           </p>
         )}
-        {JSON.stringify(deck?.created_at)}
         <p>Criado em: {formatToDate(deck!.created_at)}</p>
       </div>
       <div className="cardsContainer">{deck?.cards.map((card, index) => <PokeCard key={index} poke={card} />)}</div>

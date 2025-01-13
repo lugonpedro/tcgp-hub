@@ -1,4 +1,7 @@
-export function formatToDate(date: Date | string, type?: "full" | "date" | "time") {
+import { Timestamp } from "firebase/firestore";
+
+export function formatToDate(timestamp: Timestamp, type?: "full" | "date" | "time") {
+  const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
   if (!type || type === "full") {
     return new Date(date).toLocaleString("pt-br");
   }

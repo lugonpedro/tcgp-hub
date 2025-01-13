@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { authContext } from "@/contexts/auth-context";
 import { useCardsContext } from "@/contexts/cards-context";
 import { useToast } from "@/hooks/use-toast";
+import { CardProps } from "@/interfaces";
 import { db } from "@/services/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";

@@ -1,3 +1,4 @@
+import { SetProps } from "@/interfaces";
 import { db } from "@/services/firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { create } from "zustand";

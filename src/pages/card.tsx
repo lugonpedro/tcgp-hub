@@ -1,4 +1,5 @@
 import Loading from "@/components/loading";
+import { CardProps } from "@/interfaces";
 import { db } from "@/services/firebase";
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";

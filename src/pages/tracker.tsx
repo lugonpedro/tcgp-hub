@@ -3,6 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { authContext } from "@/contexts/auth-context";
 import { useCardsContext } from "@/contexts/cards-context";
 import { useSetsContext } from "@/contexts/sets-context";
+import { CardProps, SetProps } from "@/interfaces";
 import { useEffect, useMemo, useState } from "react";
 
 export default function Tracker() {
