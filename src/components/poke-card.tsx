@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { ButtonHTMLAttributes } from "react";
 interface PokeCardProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   poke: CardWithOwned;
-  onClick: () => void;
+  onClick?: () => void;
   showOwned?: boolean;
 }
 

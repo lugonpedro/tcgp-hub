@@ -7,7 +7,9 @@ import AuthLayout from "./pages/auth/layout";
 import Login from "./pages/auth/login";
 import Card from "./pages/card";
 import Cards from "./pages/cards";
+import Deck from "./pages/deck";
 import Decks from "./pages/decks";
+import NewDeck from "./pages/new-deck";
 import Profile from "./pages/profile";
 import Tracker from "./pages/tracker";
 import Trades from "./pages/trades";
@@ -49,6 +51,14 @@ export const router = createBrowserRouter([
       {
         path: "/decks",
         element: <Decks />,
+      },
+      {
+        path: "/decks/new",
+        element: <NewDeck />,
+      },
+      {
+        path: "/decks/:id",
+        element: <Deck />,
       },
       {
         path: "/trades",

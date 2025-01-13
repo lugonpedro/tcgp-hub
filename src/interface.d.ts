@@ -25,8 +25,8 @@ interface CardProps {
   ability: Record<string, unknown>;
   attacks: AttacksProps;
   weaknesses: string[];
-  retreatCost: string[];
-  createdAt: string;
+  retreat_cost: string[];
+  created_at: string;
 }
 
 interface PackProps {
@@ -39,4 +39,8 @@ interface SetProps {
   name: string;
   img: string;
   packs: PackProps[];
+}
+
+interface DeckProps {
+  user_id: string
 }

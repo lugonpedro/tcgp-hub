@@ -1,6 +1,6 @@
 import { db } from "@/services/firebase";
 import { User } from "firebase/auth";
-import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -9,6 +9,7 @@ export type CardWithOwned = CardProps & { owned?: boolean };
 type State = {
   cards: CardWithOwned[];
   myCards: string[];
+  deck: CardProps[]
 };
 
 type Actions = {
@@ -16,6 +17,7 @@ type Actions = {
   getMyCards: (user: User | null) => void;
   addToMyCards: (user: User | null, card: CardWithOwned) => Promise<void>;
   removeFromMyCards: (user: User | null, card: CardWithOwned) => Promise<void>;
+  getDeck: (id: string) => void;
 };
 
 export const useCardsContext = create(
@@ -69,6 +71,20 @@ export const useCardsContext = create(
 
           set({ cards: get().cards.map((c) => c.id === card.id ? { ...c, owned: false } : c) });
           set({ myCards: get().myCards.filter((c) => c !== card.id) });
+        }
+      },
+      deck: [],
+      getDeck: async (id) => {
+        set({ deck: [] });
+        const docRef = doc(db, "decks", id);
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+          const deckData = docSnap.data();
+          const completeDeck = deckData.cards.map((card_id: string) => {
+            return get().cards.find(card => card.id === card_id);
+          });
+          set({ deck: completeDeck });
         }
       },
     }),
