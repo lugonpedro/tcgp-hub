@@ -8,7 +8,17 @@ import { Separator } from "@/components/ui/separator";
 import { authContext } from "@/contexts/auth-context";
 import { auth } from "@/services/firebase";
 import { User } from "firebase/auth";
-import { ChartSpline, Cookie, Handshake, Home, Menu, SquareLibrary, User as UserIcon, WalletCards, X } from "lucide-react";
+import {
+  ChartSpline,
+  Cookie,
+  Handshake,
+  Home,
+  Menu,
+  SquareLibrary,
+  User as UserIcon,
+  WalletCards,
+  X,
+} from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { ReactNode, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
@@ -53,8 +63,8 @@ function NavbarLinks({ ...props }: { onClick?: () => void }) {
       <NavbarItem icon={<Home size={14} />} title="Início" link="/" {...props} />
       <NavbarItem icon={<SquareLibrary size={14} />} title="Cartas" link="/cards" {...props} />
       <NavbarItem icon={<ChartSpline size={14} />} title="Rastreio" link="/tracker" {...props} />
-      <NavbarItem icon={<WalletCards size={14} />} title="Decks" link="/decks" soon {...props} />
-      <NavbarItem icon={<Handshake size={14} />} title="Trocas" link="/trades" soon {...props} />
+      <NavbarItem icon={<WalletCards size={14} />} title="Decks" link="/decks" {...props} />
+      <NavbarItem icon={<Handshake size={14} />} title="Trocas" link="/trades" {...props} />
       <NavbarItem icon={<Cookie size={14} />} title="Sobre" link="/about" {...props} />
     </>
   );
@@ -141,7 +151,6 @@ interface NavbarItemProps {
   title: string;
   link?: string;
   onClick?: () => void;
-  soon?: boolean;
 }
 
 function NavbarItem(props: NavbarItemProps) {
@@ -156,14 +165,13 @@ function NavbarItem(props: NavbarItemProps) {
     return (
       <Link
         {...props}
-        to={props.soon ? "#" : props.link}
+        to={props.link}
         className={`flex w-full items-center px-3 py-2 duration-300 hover:bg-mainBlue/30 ${
           actualPage === props.link || actualPage === props.link ? "bg-mainBlue/30 hover:bg-mainBlue/30" : ""
         }`}
       >
         {props.icon}
         <p className={`text-sm ${props.icon ? "ml-2" : ""}`}>{props.title}</p>
-        {props.soon && <p className="text-[10px] rounded-sm ml-2 bg-primary/20 p-1 text-white">em breve</p>}
       </Link>
     );
   }
@@ -177,7 +185,6 @@ function NavbarItem(props: NavbarItemProps) {
       >
         {props.icon}
         <p className={`text-sm ${props.icon ? "ml-2" : ""}`}>{props.title}</p>
-        {props.soon && <p className="text-[10px] rounded-sm ml-2 bg-primary/20 p-1 text-white">em breve</p>}
       </div>
     );
   }

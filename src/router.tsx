@@ -9,6 +9,8 @@ import Card from "./pages/card";
 import Cards from "./pages/cards";
 import Profile from "./pages/profile";
 import Tracker from "./pages/tracker";
+import Decks from "./pages/decks";
+import Trades from "./pages/trades";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +40,14 @@ export const router = createBrowserRouter([
       {
         path: "/tracker",
         element: <Tracker />,
+      },
+      {
+        path: "/decks",
+        element: <Decks />,
+      },
+      {
+        path: "/trades",
+        element: <Trades />,
       },
     ],
   },
