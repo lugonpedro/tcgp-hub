@@ -16,7 +16,9 @@ export function PokeCard({ poke, owned, ...props }: PokeCardProps) {
       }}
     >
       <button {...props} className="rounded-xl disabled:opacity-10" type="button">
-        {owned && <CircleCheck className="h-8 w-8 md:h-16 md:w-16 absolute z-40 text-green-500 bg-white rounded-full" />}
+        {owned && (
+          <CircleCheck className="h-8 w-8 md:h-16 md:w-16 absolute z-40 text-green-500 bg-white rounded-full" />
+        )}
         <img src={poke.img} className="md:h-64" />
       </button>
     </motion.div>

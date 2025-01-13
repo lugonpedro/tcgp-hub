@@ -23,7 +23,7 @@ export const useCardsContext = create(
       getCards: async () => {
         const q = query(collection(db, "cards"), orderBy("createdAt", "asc"));
         const querySnapshot = await getDocs(q);
-  
+
         const cardsArr: CardProps[] = [];
         await Promise.all(
           querySnapshot.docs.map(async (doc) => {
@@ -38,7 +38,7 @@ export const useCardsContext = create(
         if (!user) return;
         const q = query(collection(db, "collections"), where("user_id", "==", user!.uid));
         const querySnapshot = await getDocs(q);
-  
+
         const cardsArr: string[] = [];
         await Promise.all(
           querySnapshot.docs.map(async (doc) => {

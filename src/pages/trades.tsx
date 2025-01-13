@@ -1,3 +1,3 @@
 export default function Trades() {
-  return (<p className="text-secondary">Em construção</p>)
+  return <p className="text-secondary">Em construção</p>;
 }

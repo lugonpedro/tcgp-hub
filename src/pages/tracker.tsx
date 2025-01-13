@@ -35,29 +35,32 @@ export default function Tracker() {
   }, [cards, myCards, setId]);
 
   const groupedByPackage = useMemo(() => {
-    return setCards.reduce((acc, card) => {
-      card.package.forEach(pkg => {
-        const { name } = pkg;
-        if (!acc[name]) {
-          acc[name] = [];
-        }
-        acc[name].push(card);
-      });
-      return acc;
-    }, {} as { [key: string]: CardProps[] });
+    return setCards.reduce(
+      (acc, card) => {
+        card.package.forEach((pkg) => {
+          const { name } = pkg;
+          if (!acc[name]) {
+            acc[name] = [];
+          }
+          acc[name].push(card);
+        });
+        return acc;
+      },
+      {} as { [key: string]: CardProps[] }
+    );
   }, [setCards]);
 
   const ownedCards = useMemo(() => {
-    if(!set || !groupedByPackage) return []
+    if (!set || !groupedByPackage) return [];
     return set.packs.map((p) => {
-      return groupedByPackage[p.name]?.filter(card => myCards.includes(card.id)).length
+      return groupedByPackage[p.name]?.filter((card) => myCards.includes(card.id)).length;
     });
-  }, [set, groupedByPackage])
-  
+  }, [set, groupedByPackage]);
+
   const missingCards = useMemo(() => {
     if (!set || !groupedByPackage) return [];
     return set.packs.map((p) => {
-      return groupedByPackage[p.name]?.filter(card => !myCards.includes(card.id)).length;
+      return groupedByPackage[p.name]?.filter((card) => !myCards.includes(card.id)).length;
     });
   }, [set, groupedByPackage]);
 

@@ -51,11 +51,7 @@ function Home() {
       />
       <div className="cardsContainer">
         {actualCards!.map((card) => (
-          <PokeCard
-            key={card.id}
-            poke={card}
-            onClick={() => navigate("/cards/" + card.id)}
-          />
+          <PokeCard key={card.id} poke={card} onClick={() => navigate("/cards/" + card.id)} />
         ))}
       </div>
       {search.length < 2 && <Paginator page={page} setPage={setPage} cards={cards} pageLimit={pageLimit} />}

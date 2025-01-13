@@ -10,21 +10,19 @@ type Actions = {
   getSets: () => void;
 };
 
-export const useSetsContext = create<State & Actions>(
-  (set) => ({
-    sets: [],
-    getSets: async () => {
-      const q = query(collection(db, "sets"), orderBy("createdAt", "asc"));
-      const querySnapshot = await getDocs(q);
+export const useSetsContext = create<State & Actions>((set) => ({
+  sets: [],
+  getSets: async () => {
+    const q = query(collection(db, "sets"), orderBy("createdAt", "asc"));
+    const querySnapshot = await getDocs(q);
 
-      const setsArr: SetProps[] = [];
-      await Promise.all(
-        querySnapshot.docs.map(async (doc) => {
-          setsArr.push(doc.data() as SetProps);
-        })
-      );
+    const setsArr: SetProps[] = [];
+    await Promise.all(
+      querySnapshot.docs.map(async (doc) => {
+        setsArr.push(doc.data() as SetProps);
+      })
+    );
 
-      set({ sets: setsArr });
-    },
-  })
-);
+    set({ sets: setsArr });
+  },
+}));
