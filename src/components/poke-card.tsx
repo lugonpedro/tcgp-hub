@@ -1,4 +1,4 @@
-import { CardWithOwned } from "@/contexts/cards-contex";
+import { CardWithOwned } from "@/contexts/cards-context";
 import { CircleCheck } from "lucide-react";
 import { motion } from "motion/react";
 import { ButtonHTMLAttributes } from "react";

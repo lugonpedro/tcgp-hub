@@ -1,7 +1,7 @@
 import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { authContext } from "@/contexts/auth-context";
-import { useCardsContext } from "@/contexts/cards-contex";
+import { useCardsContext } from "@/contexts/cards-context";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 

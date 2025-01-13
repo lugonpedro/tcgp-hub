@@ -9,7 +9,7 @@ export type CardWithOwned = CardProps & { owned?: boolean };
 type State = {
   cards: CardWithOwned[];
   myCards: string[];
-  deck: CardProps[]
+  deck: DeckProps | null
 };
 
 type Actions = {
@@ -73,20 +73,50 @@ export const useCardsContext = create(
           set({ myCards: get().myCards.filter((c) => c !== card.id) });
         }
       },
-      deck: [],
+      deck: null,
       getDeck: async (id) => {
-        set({ deck: [] });
-        const docRef = doc(db, "decks", id);
-        const docSnap = await getDoc(docRef);
-        
-        if (docSnap.exists()) {
-          const deckData = docSnap.data();
-          const completeDeck = deckData.cards.map((card_id: string) => {
-            return get().cards.find(card => card.id === card_id);
-          });
-          set({ deck: completeDeck });
+        set({ deck: null });
+        const deckRef = doc(db, "decks", id);
+        const deckSnap = await getDoc(deckRef);
+
+        if (!deckSnap.exists()) {
+          return
         }
-      },
+
+        let user_id;
+        let deck = {};
+
+        const deckData = deckSnap.data();
+        const completeDeck = deckData.cards.map((card_id: string) => {
+          return get().cards.find(card => card.id === card_id);
+        });
+        user_id = deckData.user_id;
+        deck = {
+          ...deck,
+          cards: completeDeck,
+          upvote: deckData.upvote,
+          created_at: deckData.created_at,
+        };
+
+        const userRef = doc(db, "profiles", user_id);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+          return
+        }
+
+        const userData = userSnap.data();
+        deck = {
+          ...deck,
+          user: {
+            id: userData.id,
+            name: userData.name,
+            nick: userData.nick,
+          }
+        };
+
+        set({ deck: deck as DeckProps });
+      }
     }),
     {
       name: "cards",

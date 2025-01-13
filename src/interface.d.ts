@@ -42,5 +42,12 @@ interface SetProps {
 }
 
 interface DeckProps {
-  user_id: string
+  user: {
+    id: string;
+    name: string;
+    nick: string;
+  }
+  cards: CardProps[]
+  upvote: number
+  created_at: string
 }

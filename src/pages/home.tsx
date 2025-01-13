@@ -2,7 +2,7 @@ import Loading from "@/components/loading";
 import Paginator from "@/components/paginator";
 import { PokeCard } from "@/components/poke-card";
 import { Input } from "@/components/ui/input";
-import { useCardsContext } from "@/contexts/cards-contex";
+import { useCardsContext } from "@/contexts/cards-context";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { ToastAction } from "@/components/ui/toast";
 import { authContext } from "@/contexts/auth-context";
-import { CardWithOwned, useCardsContext } from "@/contexts/cards-contex";
+import { CardWithOwned, useCardsContext } from "@/contexts/cards-context";
 import { useToast } from "@/hooks/use-toast";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";

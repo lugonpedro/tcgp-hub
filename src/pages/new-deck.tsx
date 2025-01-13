@@ -4,7 +4,7 @@ import { PokeCard } from "@/components/poke-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { authContext } from "@/contexts/auth-context";
-import { useCardsContext } from "@/contexts/cards-contex";
+import { useCardsContext } from "@/contexts/cards-context";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/services/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";

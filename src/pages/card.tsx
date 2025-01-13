@@ -41,7 +41,7 @@ export default function Card() {
       {/* <p>{data!.attacks}</p> */}
       {/* <p>{data!.package}</p> */}
       {/* <p>{data!.rarity}</p> */}
-      <p>Retreat: {data!.retreatCost}</p>
+      <p>Retreat: {data!.retreat_cost}</p>
       <p>Set: {data!.set}</p>
       <p>Type: {data!.type}</p>
       <p>Weakness: {data!.weaknesses}</p>
