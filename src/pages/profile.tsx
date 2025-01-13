@@ -7,6 +7,7 @@ import { authContext } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/services/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { Copy } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PatternFormat } from "react-number-format";
 
@@ -47,6 +48,12 @@ export default function Profile() {
     }
   }
 
+  function copyId() {
+    const profileLink = `${window.location.href}/${id}`;
+    navigator.clipboard.writeText(profileLink);
+    toast({ description: "Link do perfil para a área de transferência" });
+  }
+
   if (!user) {
     return <div className="text-secondary">Faça login para ver e editar seu perfil</div>;
   }
@@ -76,14 +83,20 @@ export default function Profile() {
           </div>
           <div>
             <Label>ID</Label>
-            <PatternFormat
-              customInput={Input}
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-              placeholder="ID"
-              format="####-####-####-####"
-              mask="_"
-            />
+            <div className="flex flex-row gap-2">
+              <PatternFormat
+                customInput={Input}
+                value={id}
+                onChange={(e) => setId(e.target.value)}
+                placeholder="ID"
+                format="####-####-####-####"
+              />
+              {/\d+$/.test(id) && (
+                <Button onClick={copyId}>
+                  <Copy />
+                </Button>
+              )}
+            </div>
           </div>
         </CardContent>
         <CardFooter>
