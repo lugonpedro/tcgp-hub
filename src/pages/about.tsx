@@ -7,6 +7,14 @@ export default function About() {
         fãs não oficial e não é endossado ou afiliado aos Pokémon Rights Holders.
       </p>
       <p>
+        O site ainda está em construção, tanto as funcionalidades quanto o design e é um projeto open-source, caso queira
+        contribuir{" "}
+        <a href="https://github.com/lugonpedro/tcgp-hub" target="_blank" className="underline">
+          esse é o repositório
+        </a>
+        .
+      </p>
+      <p>
         Feito com ❤️ por{" "}
         <a target="_blank" href="https://lugon.dev" className="underline">
           Pedro Lugon
