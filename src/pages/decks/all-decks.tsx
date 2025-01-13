@@ -5,7 +5,7 @@ import { useCardsContext } from "@/contexts/cards-context";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Decks() {
+export default function AllDecks() {
   const { user } = authContext();
   const navigate = useNavigate();
 

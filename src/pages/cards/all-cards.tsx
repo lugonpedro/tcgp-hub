@@ -13,7 +13,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Cards() {
+export default function AllCards() {
   const { user } = authContext();
   const { loading, cards, getCards, myCards, getMyCards, addToMyCards, removeFromMyCards } = useCardsContext();
   const [search, setSearch] = useState("");

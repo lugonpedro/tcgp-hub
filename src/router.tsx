@@ -5,13 +5,13 @@ import Navbar from "./components/navbar";
 import About from "./pages/about";
 import AuthLayout from "./pages/auth/layout";
 import Login from "./pages/auth/login";
-import Cards from "./pages/cards/all-cards";
-import Card from "./pages/cards/card-detail";
-import Decks from "./pages/decks/all-decks";
-import Deck from "./pages/decks/deck-detail";
+import AllCards from "./pages/cards/all-cards";
+import CardDetail from "./pages/cards/card-detail";
+import AllDecks from "./pages/decks/all-decks";
+import DeckDetail from "./pages/decks/deck-detail";
 import NewDeck from "./pages/decks/new-deck";
 import Profile from "./pages/profile/profile";
-import UserProfile from "./pages/profile/profile-detail";
+import ProfileDetail from "./pages/profile/profile-detail";
 import Tracker from "./pages/tracker";
 import Trades from "./pages/trades";
 
@@ -30,11 +30,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/cards",
-        element: <Cards />,
+        element: <AllCards />,
       },
       {
         path: "/cards/:id",
-        element: <Card />,
+        element: <CardDetail />,
       },
       {
         path: "/profile",
@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/profile/:id",
-        element: <UserProfile />,
+        element: <ProfileDetail />,
       },
       {
         path: "/tracker",
@@ -50,7 +50,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/decks",
-        element: <Decks />,
+        element: <AllDecks />,
       },
       {
         path: "/decks/new",
@@ -58,7 +58,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/decks/:id",
-        element: <Deck />,
+        element: <DeckDetail />,
       },
       {
         path: "/trades",

@@ -5,7 +5,7 @@ import { formatToDate } from "@/utils/format-to-date";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-export default function Deck() {
+export default function DeckDetail() {
   const { id } = useParams();
 
   const { loading, deck, getCards, getDeck } = useCardsContext();

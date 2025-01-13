@@ -3,7 +3,7 @@ import { useProfileContext } from "@/contexts/profile-context";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-export default function UserProfile() {
+export default function ProfileDetail() {
   const { id } = useParams();
 
   const { loading, profile, getProfile } = useProfileContext();

@@ -5,7 +5,7 @@ import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-export default function Card() {
+export default function CardDetail() {
   const { id } = useParams();
   const [data, setData] = useState<CardProps>();
   const [loading, setLoading] = useState<boolean>(false);
