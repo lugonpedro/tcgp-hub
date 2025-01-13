@@ -5,15 +5,15 @@ import Navbar from "./components/navbar";
 import About from "./pages/about";
 import AuthLayout from "./pages/auth/layout";
 import Login from "./pages/auth/login";
-import Card from "./pages/card";
-import Cards from "./pages/cards";
-import Deck from "./pages/deck";
-import Decks from "./pages/decks";
-import NewDeck from "./pages/new-deck";
-import Profile from "./pages/profile";
+import Cards from "./pages/cards/all-cards";
+import Card from "./pages/cards/card-detail";
+import Decks from "./pages/decks/all-decks";
+import Deck from "./pages/decks/deck-detail";
+import NewDeck from "./pages/decks/new-deck";
+import Profile from "./pages/profile/profile";
+import UserProfile from "./pages/profile/profile-detail";
 import Tracker from "./pages/tracker";
 import Trades from "./pages/trades";
-import UserProfile from "./pages/user-profile";
 
 export const router = createBrowserRouter([
   {
