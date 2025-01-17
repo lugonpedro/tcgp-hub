@@ -24,18 +24,26 @@ export default function About() {
       <div>
         <h2 className="text-2xl">Desenvolvimento</h2>
         <p>
-          A plataforma ainda está em construção, mesmo que o roadmap mostre como ✅ as funcionalidades ainda serão melhoradas e terão bugs corrigidos.
+          A plataforma ainda está em construção, mesmo que o roadmap mostre como ✅ as funcionalidades ainda serão
+          melhoradas e terão bugs corrigidos.
         </p>
         <p>
-        É um projeto open-source e caso
-          queira contribuir é só acessar o link{" "}
+          É um projeto open-source e caso queira contribuir é só acessar o link{" "}
           <a href="https://github.com/lugonpedro/tcgp-hub" target="_blank" className="underline">
             do repositório
           </a>
           .
         </p>
       </div>
-
+      <div>
+        <h2 className="text-2xl">Caso encontre erros para navegar ou usar a plataforma</h2>
+        <p>
+          Tente limpar o cache do navegador ou acessar a plataforma em modo anônimo. Caso o erro persista, por favor
+          entre em contato com o e-mail <a href="mailto:pedrolugonm@gmail.com?subject=Erro na plataforma TCGPHub" className="underline">
+          pedrolugonm@gmail.com
+        </a>
+        </p>
+      </div>
       <p>
         Feito com ❤️ por{" "}
         <a target="_blank" href="https://lugon.dev" className="underline">
