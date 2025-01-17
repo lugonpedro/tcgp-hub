@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useAuthContext } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/services/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { Copy } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PatternFormat } from "react-number-format";
@@ -36,6 +36,18 @@ export default function Profile() {
   }, [user]);
 
   async function saveProfile() {
+    try {
+      const q = query(collection(db, "profiles"), where("id", "==", id.replace(/-/g, "")));
+      const snapshot = await getDocs(q);
+
+      if (!snapshot.empty) {
+        toast({ description: "Já existe um usuário com esse id 🥲", variant: "destructive" });
+        return;
+      }
+    } catch (ex: unknown) {
+      toast({ description: "Algo deu errado, tente novamente", variant: "destructive" });
+    }
+
     try {
       await setDoc(doc(db, "profiles", user!.uid), {
         name: name,
