@@ -25,7 +25,7 @@ export const useCardsContext = create(
       getDbCards: async () => {
         if (parseInt(import.meta.env.VITE_POKEMON_CARDS_LENGTH) === get().dbCards.length) return;
         set({ loading: true });
-        const q = query(collection(db, "cards"), orderBy("createdAt", "asc"));
+        const q = query(collection(db, "cards"), orderBy("created_at", "asc"));
         const snapshot = await getDocs(q);
 
         const cardsArr: CardProps[] = [];

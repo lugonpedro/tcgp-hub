@@ -22,6 +22,7 @@ export interface SetProps {
   name: string;
   img: string;
   packs: PackProps[];
+  created_at: Timestamp
 }
 
 export interface PackProps {
@@ -44,7 +45,8 @@ export interface AttacksProps {
 }
 
 export interface DeckProps {
-  user: ProfileProps
+  user?: ProfileProps
+  user_id: string
   cards: CardProps[]
   upvote: number
   created_at: Timestamp

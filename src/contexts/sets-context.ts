@@ -17,7 +17,7 @@ export const useSetsContext = create<State & Actions>((set) => ({
   sets: [],
   getSets: async () => {
     set({ loading: true });
-    const q = query(collection(db, "sets"), orderBy("createdAt", "asc"));
+    const q = query(collection(db, "sets"), orderBy("created_at", "asc"));
     const querySnapshot = await getDocs(q);
 
     const setsArr: SetProps[] = [];

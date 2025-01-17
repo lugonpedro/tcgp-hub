@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 export default function NewDeck() {
   const [deck, setDeck] = useState<CardProps[]>([]);
 
-  const { loading, cards, getCards } = useCardsContext();
+  const { loading, cards, getDbCards } = useCardsContext();
   const { user } = useAuthContext();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -25,7 +25,7 @@ export default function NewDeck() {
   const { toast } = useToast();
 
   useEffect(() => {
-    getCards();
+    getDbCards();
   }, []);
 
   const actualCards = useMemo(() => {

@@ -1,6 +1,7 @@
 import Loading from "@/components/loading";
 import { PokeCard } from "@/components/poke-card";
 import { useCardsContext } from "@/contexts/cards-context";
+import { useDecksContext } from "@/contexts/decks-context";
 import { formatToDate } from "@/utils/format-to-date";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -8,12 +9,17 @@ import { useParams } from "react-router-dom";
 export default function DeckDetail() {
   const { id } = useParams();
 
-  const { loading, deck, getCards, getDeck } = useCardsContext();
+  const { dbCards, getDbCards } = useCardsContext();
+  const { loading, deck, getDeck } = useDecksContext();
 
   useEffect(() => {
-    getCards();
-    getDeck(id!);
+    getDbCards();
   }, []);
+
+  useEffect(() => {
+    if (!id) return;
+    getDeck(id, dbCards);
+  }, [id]);
 
   if (loading) {
     return <Loading />;
