@@ -17,9 +17,8 @@ import { useNavigate } from "react-router-dom";
 export default function AllCards() {
   const { user } = useAuthContext();
   const { loading, cards, getDbCards, updateCards } = useCardsContext();
-  const { myCollection, getMyCollection, addToMyCollection, removeFromMyCollection } = useCollectionsContext();
+  const { myCollection, getMyCollection, addToMyCollection, removeFromMyCollection, loading: loadingCard } = useCollectionsContext();
   const [search, setSearch] = useState("");
-  const [loadingCard, setLoadingCard] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const pageLimit = 20;
 
@@ -64,15 +63,11 @@ export default function AllCards() {
       return;
     }
 
-    setLoadingCard(true);
-
     if (myCollection.includes(poke.id)) {
       await removeFromMyCollection(user, poke);
     } else {
       await addToMyCollection(user, poke);
     }
-
-    setLoadingCard(false);
   }
 
   const columns: ColumnDef<CardWithOwned>[] = [
