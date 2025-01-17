@@ -96,6 +96,7 @@ function NavbarDesktop({ user }: { user: User | null }) {
       <div>
         <div className="leading-none text-center mb-4">
           <p className="text-xl font-semibold">TCGP Hub</p>
+          <p className="text-[14px]">beta</p>
         </div>
         <NavbarLinks />
       </div>
@@ -111,8 +112,9 @@ function NavbarMobile({ user }: { user: User | null }) {
   return (
     <header className="bg-secondary absolute top-0 left-0 w-full h-16 flex items-center justify-between px-4 z-50 border-b shrink-0">
       <div className="flex flex-row items-center">
-        <div className="leading-none">
+        <div className="leading-none flex flex-row items-center gap-0.5">
           <p className="text-xl font-semibold">TCGPH</p>
+          <p className="text-[14px]">beta</p>
         </div>
       </div>
       {opened ? <X onClick={() => setOpened(false)} /> : <Menu onClick={() => setOpened(true)} />}
