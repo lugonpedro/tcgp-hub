@@ -42,7 +42,7 @@ export default function DeckDetail() {
         )}
         <p>Criado em: {formatToDate(deck!.created_at)}</p>
       </div>
-      <div className="cardsContainer">{deck?.cards.map((card, index) => <PokeCard key={index} poke={card} />)}</div>
+      <div className="cardsContainer">{deck?.completeDeck.map((card, index) => <PokeCard key={index} poke={card} />)}</div>
     </div>
   );
 }

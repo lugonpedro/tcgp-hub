@@ -45,9 +45,11 @@ export interface AttacksProps {
 }
 
 export interface DeckProps {
+  internal_id: string
   user?: ProfileProps
   user_id: string
-  cards: CardProps[]
+  cards: string[]
+  completeDeck: CardProps[]
   upvote: number
   created_at: Timestamp
 }
