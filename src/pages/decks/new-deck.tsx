@@ -70,7 +70,6 @@ export default function NewDeck() {
     setTimeout(() => {
       navigate(`/decks/${res.id}`);
     }, 1500);
-    console.log(res.id);
   }
 
   if (loading) {

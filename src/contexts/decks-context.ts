@@ -81,8 +81,6 @@ export const useDecksContext = create<State & Actions>(
           })
         );
 
-        console.log(arr)
-
         set({ lastDecks: arr, loading: false });
       }
     }),
