@@ -43,6 +43,7 @@ export const useCollectionsContext = create(
         set({ loading: true });
 
         actualCollection.push(card.id);
+
         try {
           await setDoc(doc(db, "collections", user!.uid), {
             cards: actualCollection,
@@ -58,17 +59,17 @@ export const useCollectionsContext = create(
         if (!actualCollection.includes(card.id)) return;
         set({ loading: true });
 
-        actualCollection.filter((c) => c !== card.id);
+        const newCollection = actualCollection.filter((c) => c !== card.id);
 
         try {
           await setDoc(doc(db, "collections", user!.uid), {
-            cards: actualCollection,
+            cards: newCollection,
           });
         } catch (ex: unknown) {
           throw new Error(ex as string);
         }
         
-        set({ myCollection: actualCollection, loading: false });
+        set({ myCollection: newCollection, loading: false });
       },
     }),
     {

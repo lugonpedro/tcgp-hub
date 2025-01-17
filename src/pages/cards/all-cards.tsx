@@ -17,7 +17,13 @@ import { useNavigate } from "react-router-dom";
 export default function AllCards() {
   const { user } = useAuthContext();
   const { loading, cards, getDbCards, updateCards } = useCardsContext();
-  const { myCollection, getMyCollection, addToMyCollection, removeFromMyCollection, loading: loadingCard } = useCollectionsContext();
+  const {
+    myCollection,
+    getMyCollection,
+    addToMyCollection,
+    removeFromMyCollection,
+    loading: loadingCard,
+  } = useCollectionsContext();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const pageLimit = 20;
@@ -35,7 +41,7 @@ export default function AllCards() {
   }, [user]);
 
   useEffect(() => {
-    const unsub = useCollectionsContext.subscribe((state, _) => {
+    const unsub = useCollectionsContext.subscribe((state) => {
       updateCards(state.myCollection);
     });
 
@@ -78,8 +84,6 @@ export default function AllCards() {
         <Checkbox
           checked={el.row.original.owned}
           className="bg-secondary data-[state=checked]:bg-green-500 data-[state=checked]:text-primary"
-          onClick={() => onClick(el.row.original)}
-          disabled={loadingCard}
         />
       ),
     },
@@ -153,7 +157,14 @@ export default function AllCards() {
           actualCards!.map((card) => (
             <PokeCard key={card.id} poke={card} onClick={() => onClick(card)} disabled={loadingCard} showOwned />
           ))}
-        {list && <Table data={actualCards} columns={columns} />}
+        {list && (
+          <Table
+            data={actualCards}
+            columns={columns}
+            onClickRow={(row) => onClick(row.original)}
+            disabledRow={loadingCard}
+          />
+        )}
       </div>
       {search.length < 2 && <Paginator page={page} setPage={setPage} cards={cards} pageLimit={pageLimit} />}
     </div>
