@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const { loading, cards, getCards } = useCardsContext();
+  const { loading, cards, getDbCards } = useCardsContext();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const pageLimit = 20;
@@ -15,7 +15,7 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getCards();
+    getDbCards();
   }, []);
 
   const actualCards = useMemo(() => {

@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { ToastAction } from "@/components/ui/toast";
 import { useAuthContext } from "@/contexts/auth-context";
 import { CardWithOwned, useCardsContext } from "@/contexts/cards-context";
+import { useCollectionsContext } from "@/contexts/collections-context";
 import { useToast } from "@/hooks/use-toast";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
@@ -15,7 +16,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function AllCards() {
   const { user } = useAuthContext();
-  const { loading, cards, getCards, myCards, getMyCards, addToMyCards, removeFromMyCards } = useCardsContext();
+  const { loading, cards, getDbCards, updateCards } = useCardsContext();
+  const { myCollection, getMyCollection, addToMyCollection, removeFromMyCollection } = useCollectionsContext();
   const [search, setSearch] = useState("");
   const [loadingCard, setLoadingCard] = useState<boolean>(false);
   const [page, setPage] = useState(1);
@@ -27,12 +29,19 @@ export default function AllCards() {
   const { toast } = useToast();
 
   useEffect(() => {
-    getCards();
-  }, []);
+    getDbCards();
+
+    if (!user) return;
+    getMyCollection(user);
+  }, [user]);
 
   useEffect(() => {
-    getMyCards(user);
-  }, [user]);
+    const unsub = useCollectionsContext.subscribe((state, _) => {
+      updateCards(state.myCollection);
+    });
+
+    return () => unsub();
+  }, []);
 
   const actualCards = useMemo(() => {
     if (search.length > 2) {
@@ -40,7 +49,7 @@ export default function AllCards() {
     } else {
       return cards.slice((page - 1) * pageLimit, page * pageLimit);
     }
-  }, [search, page, cards, myCards]);
+  }, [search, page, cards, myCollection]);
 
   async function onClick(poke: CardWithOwned) {
     if (!user) {
@@ -57,10 +66,10 @@ export default function AllCards() {
 
     setLoadingCard(true);
 
-    if (myCards.includes(poke.id)) {
-      await removeFromMyCards(user, poke);
+    if (myCollection.includes(poke.id)) {
+      await removeFromMyCollection(user, poke);
     } else {
-      await addToMyCards(user, poke);
+      await addToMyCollection(user, poke);
     }
 
     setLoadingCard(false);

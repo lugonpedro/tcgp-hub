@@ -1,12 +1,12 @@
 import Loading from "@/components/loading";
-import { useProfileContext } from "@/contexts/profile-context";
+import { useProfilesContext } from "@/contexts/profiles-context";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 export default function ProfileDetail() {
   const { id } = useParams();
 
-  const { loading, profile, getProfile } = useProfileContext();
+  const { loading, profile, getProfile } = useProfilesContext();
 
   useEffect(() => {
     if (!id) return;

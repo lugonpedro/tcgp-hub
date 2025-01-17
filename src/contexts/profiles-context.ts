@@ -9,7 +9,7 @@ type ProfileContextProps = {
   getProfile: (user_id: string) => Promise<void>;
 };
 
-export const useProfileContext = create<ProfileContextProps>((set) => ({
+export const useProfilesContext = create<ProfileContextProps>((set) => ({
   loading: false,
   profile: null,
   getProfile: async (user_id) => {

@@ -2,6 +2,7 @@ import StackedBarChart from "@/components/stacked-bar-chart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuthContext } from "@/contexts/auth-context";
 import { useCardsContext } from "@/contexts/cards-context";
+import { useCollectionsContext } from "@/contexts/collections-context";
 import { useSetsContext } from "@/contexts/sets-context";
 import { CardProps, SetProps } from "@/interfaces";
 import { useEffect, useMemo, useState } from "react";
@@ -9,20 +10,22 @@ import { useEffect, useMemo, useState } from "react";
 export default function Tracker() {
   const { user } = useAuthContext();
   const { sets, getSets } = useSetsContext();
-  const { cards, getCards, myCards, getMyCards } = useCardsContext();
+  const { cards, getDbCards, updateCards } = useCardsContext();
+  const {myCollection, getMyCollection} = useCollectionsContext()
 
   const [setId, setSetId] = useState<string>();
   const [set, setSet] = useState<SetProps | undefined>();
 
   useEffect(() => {
     if (!user) return;
-    getCards();
+    getDbCards();
     getSets();
+    getMyCollection(user)
   }, [user]);
 
   useEffect(() => {
-    getMyCards(user);
-  }, [user]);
+    updateCards(myCollection);
+  }, [user, myCollection]);
 
   useMemo(() => {
     if (!setId || !sets) return;
@@ -31,9 +34,9 @@ export default function Tracker() {
   }, [setId]);
 
   const setCards = useMemo(() => {
-    if (!cards || !myCards || !setId) return [];
+    if (!cards || !myCollection || !setId) return [];
     return cards.filter((card) => card.set === setId);
-  }, [cards, myCards, setId]);
+  }, [cards, myCollection, setId]);
 
   const groupedByPackage = useMemo(() => {
     return setCards.reduce(
@@ -54,14 +57,14 @@ export default function Tracker() {
   const ownedCards = useMemo(() => {
     if (!set || !groupedByPackage) return [];
     return set.packs.map((p) => {
-      return groupedByPackage[p.name]?.filter((card) => myCards.includes(card.id)).length;
+      return groupedByPackage[p.name]?.filter((card) => myCollection.includes(card.id)).length;
     });
   }, [set, groupedByPackage]);
 
   const missingCards = useMemo(() => {
     if (!set || !groupedByPackage) return [];
     return set.packs.map((p) => {
-      return groupedByPackage[p.name]?.filter((card) => !myCards.includes(card.id)).length;
+      return groupedByPackage[p.name]?.filter((card) => !myCollection.includes(card.id)).length;
     });
   }, [set, groupedByPackage]);
 
